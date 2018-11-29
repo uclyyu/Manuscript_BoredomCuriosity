@@ -1,0 +1,784 @@
+%%% Version 3.3 Generated 2018/01/26 %%%
+%%% You will need to have the following packages installed: datetime, fmtcount, etoolbox, fcprefix, which are normally inlcuded in WinEdt. %%%
+%%% In http://www.ctan.org/ you can find the packages and how to install them, if necessary. %%%
+%%%  NB logo1.jpg is required in the path in order to correctly compile front page header %%%
+
+\documentclass[utf8]{frontiersSCNS}
+
+\usepackage{url,hyperref,lineno,microtype,subcaption}
+\usepackage[onehalfspacing]{setspace}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{algorithm}
+\usepackage{varwidth}
+\usepackage{graphicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{bm}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{booktabs}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\argmax}{\arg\max}
+
+\linenumbers
+
+
+% Leave a blank line between paragraphs instead of using \\
+
+
+\def\keyFont{\fontsize{8}{11}\helveticabold}
+\def\firstAuthorLast{Yu {et~al.}} %use et al only if is more than 1 author
+\def\Authors{Yen Yu\,$^{1,*}$, Acer Y.C. Chang\,$^{1}$ and Ryota Kanai\,$^{1}$}
+\def\Address{$^{1}$Araya, Inc., Tokyo, Japan}
+\def\corrAuthor{Nishi-Shimbashi 2-choume Mori Building 3F, 2-22-1 Nishi-Shimbashi, Minato-ku, Tokyo, Japan}
+\def\corrEmail{yen.yu@araya.org}
+
+
+
+
+\begin{document}
+\onecolumn
+\firstpage{1}
+
+\title[Boredom-driven curiosity]{Boredom-driven curious learning by Homeo-Heterostatic Value Gradients} 
+
+\author[\firstAuthorLast ]{\Authors} %This field will be automatically populated
+\address{} %This field will be automatically populated
+\correspondance{} %This field will be automatically populated
+
+\extraAuth{}% If there are more than 1 corresponding author, comment this line and uncomment the next one.
+%\extraAuth{corresponding Author2 \\ Laboratory X2, Institute X2, Department X2, Organization X2, Street X2, City X2 , State XX2 (only USA, Canada and Australia), Zip Code2, X2 Country X2, email2@uni2.edu}
+
+
+\maketitle
+
+
+\begin{abstract}
+
+This paper presents the Homeo-Heterostatic Value Gradients (HHVG) algorithm as a formal account on the constructive interplay between boredom and curiosity which gives rise to effective exploration and superior forward model learning. We offer an instrumental view of action selection, in which an action serves to disclose outcomes that have intrinsic meaningfulness to an agent itself. This motivated two central algorithmic ingredients: devaluation and devaluation progress, both underpin agent's cognition concerning intrinsically generated rewards. The two serve as an instantiation of homeostatic and heterostatic intrinsic motivation. A key insight from our algorithm is that the two seemingly opposite motivations can be reconciled---without which exploration and information-gathering cannot be effectively carried out. We supported this claim with empirical evidence, showing that boredom-enabled agents consistently outperformed other curious or explorative agent variants in model building benchmarks based on self-assisted experience accumulation. 
+
+\tiny
+ \keyFont{ \section{Keywords:} curiosity, boredom, goal-directedness, intrinsic motivation, outcome devaluation, satiety, homeostatic motivation, heterostatic motivation}
+\end{abstract}
+
+
+\section{Introduction}
+
+In this study, we present an instrumental view of action selection, in which an action serves to disclose outcomes that have intrinsic meaningfulness---i.e., that hold epistemic values---to an agent itself. The implication of this statement is twofold: (1) for agents whose innate goal appeals to their own knowledge gain, the occurrence of curiosity rests upon the devaluation of known knowledge (and hence goal-directedness); (2) boredom---consequential to devaluation---and curiosity entail a mutually reinforcing cycle for such kind of (meaningful) disclosure to ensue.
+
+Animal studies have shown that learning stimulus-response (S-R) association through action-outcome reinforcement is but one facet of instrumental behaviour. Internally, animals may build models that assign values to reappraise experienced outcomes. This expands the landscape of instrumental behaviour to include stimulus-outcome-response (S-O-R) learning system---or goal-directed learning \citep{Balleine.1998}. Goal-directed behaviour is known in both empirical and computational approaches to support adaptive and optimal action selection \citep{adams1981instrumental, adams1982variations, mannella2016goal}. Central to such behavioural adaptiveness is devaluation. This means for a given action-outcome pair the associated reinforcing signal is no longer monotonic. Instead, outcome value varies under reappraisal within according to their relevance to or attainment of goal. 
+
+One classic paradigm of devaluation manipulates agent's level of satiation based on food accessibility, leading to altered behavioural pattern. In the context of epistemic disclosure, an analogy can be drawn between devaluation and the emergence of boredom, in which one's assimilation of knowledge reduces the value of similar knowledge in future encounter. The relationship between boredom and outcome devaluation has a long history in psychological research. Empirical findings indicated that boredom is reportedly accompanied by negative affective experience, suggesting that experienced outcomes are intrinsically evaluated and considered as less valuable \citep{bench2013function, van2012boredom, fahlman2009does, perkins1985cognitive, vodanovich1991boredom}. Psychophysiological studies also demonstrated that boredom plays an active role of information-seeking behaviour. Subjects showing higher levels of reported boredom are accompanied by increased autonomic arousal, such as heart rate and galvanic skin response. These findings is in line with our key notion that boredom intrinsically and actively drives agents learning behaviours \citep{london1972increase, harris2000correlates}. Consistent with our argument, evidence also showed that boredom is associated with increase in creativity \citep{harris2000correlates, schubert1977boredom, schubert1978creativity}. This suggests that the presence of boredom serves to reconfigure agent's instrumental device in order to escape devalued states.
+
+Curiosity, irrespective of being a by-product of external goal-attainment or an implicit goal in and of agent itself, is often ascribed as a correlate of information-seeking behaviour \citep{2013gottlieb}. Behaviours exhibiting curious quality are observed in humans and animals alike, suggesting an universal role of curiosity in shaping one's fitness in terms of survival chance. Though the exact neural mechanism underlying the emergence of curious behaviour still remains obscure, current paradigms have their focus on (1) novelty disclosure and (2) uncertainty reduction aspects of information-seeking \citep{pathak2017icm, friston2017curiosity, bellemare2016count, ostrovski2017count}. Indeed, both aspects can be argued to improve agent's fitness in epistemic landscape if the agent elects to incorporate the novelty or uncertainty.
+
+In intrinsic motivation literature \citep{intrinsicmotiv}, although one can readily associate boredom with homeostatic motivation and curiosity with heterostatic motivation, our argument suggests they can in fact be complementary. Our contribution thus pertains to the reconciliation of homeo-heterostatic motivations.
+
+\section{Markov Decision Process}
+
+In what follows, we briefly review preliminaries for the ensuing algorithm. We focus on well-established themes surrounding typical reinforcement learning, including Markov Decision Process and value gradients as a policy optimisation technique. 
+
+In Markov Decision Process (MDP) one considers the tuple $(S, A, R, P, \pi, \gamma)$. $S$ and $A$ are spaces of real vectors whose member, $\bs{s} \in S$ and $\bs{a} \in A$, represent states (or sensor values) and actions. $R$ is some reward function defining the mapping $R: S \times A \to \mathbb{R}$. The probabilities associated with states and actions are given by the forward model $P (S^\prime|A=\bs{a}, S=\bs{s})$ and the action policy $\pi(A|S=\bs{s})$. Throughout the paper we use the `prime' notation, e.g., $\bs{s}^\prime$, to represent one time step into the future: $\bs{s}^\prime=\bs{s}(t+1)$.
+
+The goal of MDP is to optimally determine the action policy $\pi^\ast$ such that the expected cumulative reward over a finite (or infinite) horizon is maximised. Considering a finite horizon problem with discrete time, $t \in [0, T]$, this is equivalent to $\pi^\ast = \argmax_\pi \mathbb E_{\bs{a} \sim \pi}\left[ \sum_{t=0}^{T}\gamma^t R(\bs{s}(t), \bs{a}(t)) \right]$, where $\gamma \in [0, 1]$ is the discount factor.
+
+Many practical approaches for solving MDP often resort to approximating state-action value $q(\bs{a}, \bs{s})$ or state value $v(\bs{s})$ functions \citep{sutton1998reinforcement, deepmind2013atari, deepmind2015lillicrap, svg}. These value functions are given in the Bellman equation
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:bellman}
+	v(\bs{s}) 
+	&=
+	\mathbb{E}_{\pi(\bs{a}|\bs{s})} 
+	\Bigl[ R(\bs{a}, \bs{s}) + \gamma q(\bs{a}, \bs{s}) \Bigr] \\
+	&=
+	\mathbb{E}_{\pi(\bs{a}|\bs{s})} 
+	\Bigl[ R(\bs{a}, \bs{s}) + \gamma \mathbb{E}_{P(\bs{s}^\prime|\bs{a}, \bs{s})} [v(\bs{s}^\prime)] \Bigr]
+	\end{aligned}
+	\end{equation}
+%
+When differentiable forward model and reward function are both available, policy gradients can be analytically estimated using value gradients \citep{2012fairbank, svg}.
+
+
+\section{Homeo-Heterostatic Value Gradients} \label{sec:algorithm}
+
+This section describes formally the algorithmic structure and components of the Homeo-Heterostatic Value Gradients, or HHVG. The naming of HHVG suggests its connections with homeostatic and heterostatic intrinsic motivations. A detailed review on homeostatic and heterostatic motivations are given in \cite{intrinsicmotiv}. Briefly, a homeostatic motivation encourages an organism to occupy a set of predictable, unsurprising states (i.e., a {\it comfort zone}). Whereas, a heterostatic motivation does the opposite; curiosity belongs to this category. 
+
+The algorithm offers reconciliation between the two seemingly opposite qualities and concludes with their cooperative nature. Specifically, the knowledge an organism maintains about its comfort zone helps instigate outbound heterostatic drives. In return, satisfying heterostatic drives broadens the organism's extent of comfort zone. As a consequence, the organism not only improves its fitness in terms of homeostatic outreach but also becomes effectively curious.
+
+\subsection{Nomenclature and notations} \label{subsec:notation}
+
+It is instructive to overview the nomenclature of the algorithm. We consistently associate homeostatic motivation with the emergence of {\it boredom}, which reflects the result of having incorporated novel information into one's knowledge, thereby diminishing the novelty to begin with. This is conceptually compatible with outcome {\it devaluation} or induced satiety in instrumental learning. {\it Devaluation progress} is therefore referred to as one's epistemic achievement. That is, the transitioning of a priori knowledge to one of having assimilated otherwise unknown information. The devaluation progress is interpreted as an instantiation of intrinsic reward. The drive to maintain steady rewards conforms to a heterostatic motivation.
+
+The notation $\mathcal L(\cdot)$ consistently denotes loss functions throughout the paper; any variables on which the loss function depends are always made explicit. There are occasions where we abbreviated the loss function to avoid clutters. A definition such as $\mathcal L_{mm}(\psi) := \mathcal L(\bs a, \bs s; \psi, \theta)$ is then given upon first appearance. Here, the subscript $mm$ indicates {\it meta-model}. One may tell in this example that the symbols $\bs a$, $\bs s$, and $\theta$ on the right hand side are temporarily omitted. This means the optimisation procedure for the meta-model concerns only the parameter $\psi$. Similarly, this applies to $\mathcal L_{fm}$, $\mathcal L_{vf}$, and $\mathcal L_{ap}$, where the subscripts stand for {\it forward model}, {\it value function}, and {\it action policy}. The symbol $\mathcal N$ is reserved for Normal distribution. 
+
+
+\subsection{Intuition} \label{subsec:intuition}
+
+An intuitive understanding of HHVG is visualised in Figure \ref{fig:intuition}. Imagine the interplay between a thrower and their counterpart --- a catcher. The catcher anticipates where the thrower is aiming and makes progress by improving its prediction. The thrower, on the other hand, keeps the catcher engaged by devising novel aims. Over time, the catcher knows well what the thrower is capable of, whilst the thrower has attempted a wide spectrum of pitches.
+
+In the algorithm, the thrower is represented by a forward model attached to a controller (policy) and the catcher a ``meta-model''. We unpack and report them individually. Procedural information is summarised in Algorithm \ref{alg:hhvg}.
+
+\subsection{Forward model} \label{subsec:fm}
+
+We start by specifying at current time the state and action sample as $\bs{s}$ and $\bs{a}$. The forward model describes the probability distribution over future state $S^\prime$, given $\bs{s}$, $\bs{a}$, and parameter $\theta$.
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:fm}
+	P(S^\prime | A=\bs{a}, S=\bs{s}; \theta)
+	\end{aligned}
+	\end{equation}
+%
+The entropy associated with $S^\prime$, conditioned on $\bs{s}$ and $\bs{a}$, gives a measure of the degree to which $S^\prime$ is informative on average. We referred to this measure as one of {\it interestingness}. Note this is a different concept from the `interestingness' proposed by \citet{schmidhuber2008driven}, which is the first-order derivative of compressibility.
+
+\subsection{Boredom, outcome devaluation, and meta-model} \label{subsec:boredom}
+
+Boredom, in common understanding, is perhaps not unfamiliar to most people under the situation of being exposed to certain information which one has known well by heart. It is the opposite of being interested. In the current work, we limited the exposure of information to those being disclosed by one's actions.
+
+To mark the necessity of boredom, we first identify the limitation of a naive instantiation of curiosity; then, we show that the introduction of boredom serves to resolve this limitation.
+
+Consider the joint occurrence of future state $S^\prime$ and action $A$: $ P (S^\prime, A|S=\bs{s}; \theta, \varphi)$.  This can be derived from the product rule of probability using $P(S^\prime|A=\bs{a}, S=\bs{s}; \theta)$ (as shown Equation \ref{eq:fm}) and action policy $\pi(A|S=\bs{s}; \varphi)$, parametrised by $\varphi$ (action policy is revisited in Section \ref{subsec:policy}). 
+
+A naive approach to curiosity is by optimising the action policy, such that $A$ is predictive of maximum {\it interestingness} (see Section \ref{subsec:fm}) about the future.
+
+However, this naive approach would certainly lead to the agent behaving habitually and, as a consequence, becoming obsessive about a limited set of outcomes. In other words, a purely interestingness-seeking agent is a darkroom agent (see Section\ref{subsec:homeohetero}; also \citet{darkroom} for related concept).
+
+Such obsession with limited outcomes poses a caveat---the agent has no recourse to inform itself about prior exposure of similar sensations. If the agent is otherwise endowed with this capacity, namely, by assimilating previous experiences into summary statistics, an ensuing sense of boredom would be induced. The induction of boredom essentially causes the agent to value the same piece of information less, thus changing the agent's perception towards interestingness. If the agent were to pursue the same interestingness-seeking policy, a downstream effect of boredom would drive the agent to seek out other information that could have been known. This conception amounts to an implicit goal of {\it devaluating} known outcomes.
+
+To this end, we introduce the following meta-model $Q$ to represent {\it a priori} knowledge about the future. Note that $Q$ is a conditional probability function over $S^\prime$ and is not to be confused with a state-action value function $q(\bs a, \bs s)$ in MDP. The meta-model, parametrised by $\psi$, is an approximation to the {\it true} marginalisation of joint probability $P(S^\prime, A|S=\bs{s}; \theta, \varphi)$ over $A$:
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:mm}
+	Q(S^\prime | S=\bs{s}; \psi) & \approx 
+		P (S^\prime | S=\bs{s}; \theta, \varphi) \\
+		&= \sum_A \Big[ P(S^\prime, A|\bs{s}; \theta, \varphi) \Bigr] \\
+		&= \sum_A \Bigl[ P (S^\prime| A, \bs{s}; \theta) \pi(A|\bs{s}; \varphi) \Bigr] \\
+	\end{aligned}
+	\end{equation}
+%
+
+We associate the occurrence of boredom, or, synonymously, outcome devaluation, with minimising the devaluation objective with respect to $\psi$. The devaluation objective is given by the Kullback-Leibler (KL) divergence:
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:mm-loss}
+	\mathcal{L}_{mm}(\psi) &:=
+	\mathcal{L}(\bs{a}, \bs{s}; \psi, \theta) \\
+		&\phantom{:}= 
+		D_{KL}\left[ P(\bs{s}^\prime|\bs{a}, \bs{s}; \theta) 
+		\middle\Vert 
+		Q(\bs{s}^\prime|\bs{s}; \psi) \right]
+	\end{aligned}
+	\end{equation}
+%
+%For the notation $\mathcal{L}_{mm}(\psi)$, where $mm$ stands for meta-model, we have dropped the dependence of $\theta$, $\bs{s}$, and $\bs{a}$. This only serves to emphasise that optimising the devaluation objective is with respect to $\psi$.
+
+\subsection{Devaluation progress, intrinsic reward, and value learning}
+
+Through the use of KL-divergence in Equation \ref{eq:mm-loss}, we emphasise the complementary nature of devaluation in relation to a knowledge-gaining process. That is to say, devaluation results in information gain for the agent. This, in fact, can be regarded as cognitively rewarding and, thus, serves to motivate our definition of intrinsic reward. 
+
+One rewarding scenario happens when $Q(S^\prime|\bs{s}; \psi)$ has all the information there is to be possessed by $A$ about $S^\prime$. $A$ is therefore rendered redundant. One may speculate, at this point, the agent could opt for inhibiting its responses. Disengaging actions potentially saves energy which is rewarding in biological sense. 
+
+Alternatively, the agent may attempt to develop new behavioural repertoires, bringing into $S^\prime$ new information (i.e., novel outcomes) that is otherwise unknown to $Q$. The ensuing sections will focus on this line of thinking.
+
+From Equation \ref{eq:mm-loss}, we construct the quantity {\it devaluation progress} to represent an intrinsically motivated reward. The devaluation progress is given by the difference between KL-divergences before and after devaluation (as indicated by the superscript $(i+1)$):
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:deval-prog}
+	R_\psi^{(i+1)}(\bs{a}, \bs{s}) 
+		&:= 
+		\mathcal{L}(\bs{a}, \bs{s}; \psi^{(i)}, \theta) - 
+		\mathcal{L}(\bs{a}, \bs{s}; \psi^{(i+1)}, \theta) \\
+		&\phantom{:}=	
+		\mathcal{L}_{mm}(\psi^{(i)}) - \mathcal{L}_{mm}(\psi^{(i+1)}),
+	\end{aligned}
+	\end{equation}
+%
+Here, we write $R_\psi^{(i+1)}(\bs{a}, \bs{s})$ in accordance with notational convention in reinforcement learning, where reward is typically a function of state and action. Subscript $\psi$ indicates the dependence of $R$ on meta model parameter.
+
+Having established the intrinsic reward, value learning is such that the value function approximator $v (\bs{s}; \nu)$ follows the Bellman equation $v(\bs{s}) = \mathbb{E}_{\bs{a}}[R(\bs{a}, \bs{s}) + \gamma \mathbb{E}_{\bs{s}^\prime}[v(\bs{s}^\prime)]]$. In practice, we minimise the objective with respect to $\nu$:
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:vf-loss}
+	\mathcal{L}_{vf}(\nu) 
+		&:= 
+		\mathcal{L}(\bs{s}^\prime, \bs{a}, \bs{s}; \nu) \\ 
+		&\phantom{:}= 
+		\norm{y - v(\bs{s}; \nu) }^2 \\
+		y 
+		&\phantom{:}= 
+		R_\psi^{(i+1)}(\bs{a}, \bs{s}) + \gamma v(\bs{s}^\prime; \tilde\nu)
+	\end{aligned}
+	\end{equation}
+%
+
+\subsection{Policy optimisation} \label{subsec:policy}
+
+We define action policy at state $S=\bs{s}$ as the probability distribution over $A$ with parameter $\varphi$:
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:policy}
+	\pi(A|S=\bs{s}; \varphi)
+	\end{aligned}
+	\end{equation}
+
+Our goal is to determine the policy parameter $\varphi$ that maximises the expected sum of future discounted rewards. One approach is by applying Stochastic Value Gradients \citep{svg} and maximises the value function. We thus define our policy objective as follows (notice the negative sign; we used a gradient update rule that defaults to minimisation):
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:policy-loss}
+	\mathcal{L}_{ap}(\varphi) 
+		&:=
+		\mathcal{L}(\bs{s}^\prime, \bs{a}, \bs{s}; \theta, \psi^{(i)}, \psi^{(i+1)}, \nu, \varphi) \\
+		&\phantom{:}= - 
+		\mathbb{E}_{\bs{a} \sim \pi(\cdot | \bs{s}; \varphi)} 
+		\Bigl[ 
+		R_\psi^{(i+1)}(\bs{a}, \bs{s}) + \gamma 
+		\mathbb{E}_{\bs{s}^\prime \sim P(\cdot |\bs{a}, \bs{s}; \theta)}
+		\bigl[ v(\bs{s}^\prime; \nu) \bigr] 
+		\Bigr] \\
+	\end{aligned}
+	\end{equation}
+
+\subsection{Remarks on homeostatic and heterostatic regulations} \label{subsec:homeohetero}
+
+\citet{intrinsicmotiv} outlined the distinctions between two important classes of intrinsic motivation: homeostatic and heterostatic. A homeostatic motivation is one that can be satiated, leading to certain equilibrium behaviourally; whereas a heterostatic motivation topples the agent, thus preventing it from occupying habitual states.
+
+Our algorithm entails regulations relating to both classes of intrinsic motivation. Specifically, the devaluation objective (Equation \ref{eq:mm-loss}) realises the homeostatic aspect due to its connection with induced satiety. On the other hand, the devaluation progress (Equation \ref{eq:deval-prog}) introduced for policy optimisation instantiates a heterostatic drive to agent's behavioural pattern.
+
+Heterostasis is motivated by the agent pushing itself towards novelty and away from devalued, homeostatic states (as revealed at the end of this section in Equation \ref{eq:hetero}). This statement is shown formally by replacing the reward $R^{(i+1)}_\psi(\bs a, \bs s)$ in Equation \ref{eq:policy-loss}, with Equation \ref{eq:deval-prog}. We then arrived at the following form involving expected KL-divergence:
+%
+	\begin{equation}
+	\begin{aligned} 
+	&\phantom{={}} 
+		-\mathbb{E}_{\bs{a} \sim \pi(\cdot | \bs{s};\varphi)} 
+		\Big[ 
+		D_{KL}[P(\bs{s}^\prime|\bs{a}, \bs{s}; \theta) \Vert Q(\bs{s}^\prime|\bs{s};\psi^{(i  )})] -
+		D_{KL}[P(\bs{s}^\prime|\bs{a}, \bs{s}; \theta) \Vert Q(\bs{s}^\prime|\bs{s};\psi^{(i+1)})]
+		\Big] \\
+	&\phantom{={}} 
+		- \mathbb{E}_{\bs{a}\sim\pi(\cdot|\bs{s};\varphi)}
+		  \mathbb{E}_{\bs{s}^\prime \sim P(\cdot | \bs{a}, \bs{s}; \theta)} 
+		  \Big[ v(\bs{s}^\prime; \nu) \Big] \\
+	&= 
+		- \Bigl\{ 
+		I(S^\prime : A|S=\bs{s}; \psi^{(i)}, \varphi, \theta) -  
+		I(S^\prime : A|S=\bs{s}; \psi^{(i+1)}, \varphi, \theta) 
+		\Bigr. \\
+	&\phantom{={}-\Big.} 
+		+ \Bigl. 
+		\mathbb{E}_{\bs{a}\sim\pi(\cdot|\bs{s};\varphi)}
+		\mathbb{E}_{\bs{s}^\prime \sim P(\cdot | \bs{a}, \bs{s}; \theta)} 
+		\big[ v(\bs{s}^\prime; \nu) \big] 
+		\Bigr\}
+	\end{aligned}
+	\end{equation}
+
+Notice that the expected devaluation progress becomes the difference between conditional mutual information $I$ before ($\psi^{(i)}$) and after devaluation ($\psi^{(i+1)})$.
+
+Assume, for the moment, that the agent is equipped with devaluation capacity only. In other words, we replace the devaluation progress and fall back on devaluation objective, $R := \mathcal{L}_{mm}(\psi)$ (cf. Equation \ref{eq:deval-prog}). The agent is now interestingness-seeking with homeostatic regulation. We further suppose that the dynamics of $\psi$ and $\varphi$ evolve in tandem, which gives
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:pardyn}
+	I(S^\prime : A | S=\bs{s}; \psi^{(i)}, \varphi^{(k)}) &\to I(S^\prime : A | S=\bs{s}; \psi^{(i+1)}, \varphi^{(k)}) \\
+		&\to I(S^\prime : A | S=\bs{s}; \psi^{(i+1)}, \varphi^{(k+1)}) \\
+		&\to I(S^\prime : A | S=\bs{s}; \psi^{(i+2)}, \varphi^{(k+1)}) \to \dots
+	\end{aligned}
+	\end{equation}
+%
+In practice, the nature of devaluation and policy optimisation often depends on replaying agent's experience. Taking turn applying gradient updates to $\psi$ and $\varphi$ creates a self-reinforcing cycle that drives the policy to converge towards a point mass. For instance, if the policy is modelled by some Gaussian distribution, this updating scheme would result in infinite precision (zero spread).
+
+For curiosity, however, such parameter dynamics should not be catastrophic if we subsume the homeostatic regulation and ensure the preservation of the relation given in Equation \ref{eq:mutinfo-relation}:
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:mutinfo-relation}
+	I(S^\prime : A | S=\bs{s}; \psi^{(i+1)}, \varphi^{(k)}) \le
+		I(S^\prime : A | S=\bs{s}; \psi^{(i)}, \varphi^{(k)}) &\le
+		I(S^\prime : A | S=\bs{s}; \psi^{(i+1)}, \varphi^{(k+1)}) \\
+	\Rightarrow
+		-I(S^\prime : A | S=\bs{s}; \psi^{(i+1)}, \varphi^{(k)}) + 
+		 I(S^\prime : A | S=\bs{s}; \psi^{(i)}, \varphi^{(k)}) &\le
+		 I(S^\prime : A | S=\bs{s}; \psi^{(i+1)}, \varphi^{(k+1)})
+	\end{aligned}
+	\end{equation}
+%
+This equation holds because the devaluation process on average has a tendency to make $A$ less informative about $S^\prime$, after which $A$ is perturbed to encourage a new $S^\prime$ less predictable to $Q$. By rearranging the equation such that the left hand side remains positive, we have arrived at a lower bound on $I(S^\prime : A | S=\bs{s}; \psi^{(i+1)}, \varphi^{(k+1)})$ which recovers the expected devaluation progress.
+
+Equation \ref{eq:argneq} summarises the argument associated with Equation \ref{eq:mutinfo-relation} and \ref{eq:pardyn}. 
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:argneq}
+	\varphi^{(k+1)} 
+	&= 
+	\argmax_{\varphi^{(k)}} 
+	\Bigl[
+	I(S^\prime : A|S=\bs{s}; \psi^{(i)}, \varphi^{(k)}) -
+	\min_{\bar{\psi}^{(i)}} I(S^\prime : A|S=\bs{s}; \bar{\psi}^{(i)}, \varphi^{(k)})
+	\Bigr] \\
+	&\neq
+	\argmax_{\varphi^{(k)}} 
+	\Bigl[
+	\min_{\psi^{(i)}} I(S^\prime : A|S=\bs{s}; \psi^{(i)}, \varphi^{(k)})
+	\Bigr]
+	\end{aligned}
+	\end{equation}
+
+Finally, we offer an intuition on how policy optimisation gives rise to heterostatic motivation. This is made clear from the optimised target $I(S^\prime : A | S=\bs{s}; \psi^{(i+1)}, \varphi^{(k+1)})$, found on the right hand side of Equation \ref{eq:mutinfo-relation}. It is instructive to re-introduce the true marginalisation $P(S^\prime|S=\bs{s}; \theta, \varphi)$ from Equation \ref{eq:mm}; write:
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:hetero}
+	&\phantom{=..}
+	I(S^\prime : A|S=\bs{s}; \psi^{(i+1)}, \varphi^{(k+1)}) \\
+	&=
+	\sum_{\bs{a}} \pi(\bs{a}|\bs{s}; \varphi^{(k+1)}) 
+	\sum_{\bs{s}^\prime} P(\bs{s}^\prime|\bs{s}, \bs{a}; \theta) 
+	\log\frac{P(\bs{s}^\prime|\bs{a}, \bs{s}; \theta)}{Q(\bs{s}^\prime|\bs{s}; \psi^{(i+1)})} \\
+	&=
+	\sum_{\bs{a}} \pi(\bs{a}|\bs{s}; \varphi^{(k+1)}) 
+	\sum_{\bs{s}^\prime} P(\bs{s}^\prime|\bs{s}, \bs{a}; \theta) 
+	\log
+	\frac{P(\bs{s}^\prime|\bs{a}, \bs{s}; \theta)}  {P(\bs{s}^\prime|\bs{s}; \theta, \varphi^{(k+1)})}
+	\frac{P(\bs{s}^\prime|\bs{s}; \theta, \varphi^{(k+1)})}  {Q(\bs{s}^\prime|\bs{s}; \psi^{(i+1)})} \\
+	&=
+	I(S^\prime : A|S=\bs{s}; \varphi^{(k+1)}) + 
+	D_{KL} \bigr[ 
+	P(\bs{s}^\prime|\bs{s}; \theta, \varphi^{(k+1)}) 
+	\Vert 
+	Q(\bs{s}^\prime|\bs{s}; \psi^{(i+1)}) \bigl]
+	\end{aligned}
+	\end{equation}
+%
+Simply, the optimised policy is such that the agent increases the conditional mutual information and is pushed away (via increasing the KL-divergence) from its homeostatic state $Q$.
+
+\section{Implementation Considerations} \label{sec:impc}
+
+This section presents practical considerations when motivating the aforementioned agent using neural networks. These considerations were mainly for the ease of calculating KL-divergence analytically. 
+
+% --- 1
+\subsection{Forward model}
+
+We assumed that the state follows some Gaussian distribution with mean $\bs{s}$ and covariance $\Sigma$. The future state is described by its mean $\bs{s}^\prime$ according to the deterministic mapping $\bs{s}^\prime = f(\bs{a}, \bs{s}; \theta)$, where $\bs{a}$ is the action sampled from policy. $f$ represents a neural network with trainable parameter $\theta$:
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:imp-fm}
+	f(\bs{a}, \bs{s}; \theta) &= \bs{A} \bs{s} + 
+	\left( \sum_\iota a_{\iota} \bs{B}^{\iota} \right) \bs{s} + 
+	\bs{C} \bs{a} + o
+	\end{aligned}
+	\end{equation}
+%
+$\bs{A}$, $\bs{B}$, and $\bs{C}$ are approximations of Jacobian matrices and $o$ a constant, all depending on $\theta$. $\bs{B}$ is a three-way tensor indexed by $\iota$ along the first axis. This treatment is similar to \citet{e2c} (also cf. \citet{dvbf}), except that we considered a bilinear approximation and that, in the following sections, we used only the mean states in a deterministic environment.
+
+The above formalism follows that $\bs{s}^\prime$ has covariance matrix $\mathbb{E}[\bs{s}^\prime\bs{s}^{\prime\intercal}] = \bs{J} \bs{\Sigma} \bs{J}^\intercal$, where $\bs{J} = \left( \bs{A} + \sum_\iota a_\iota \bs{B}^\iota \right)$. The transition probability is then given by 
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:imp-fmcov}
+	P(S^\prime | A=\bs{a}, S=\bs{s}; \theta) &= \mathcal N \left(f(\bs{a}, \bs{s}; \theta), \bs{J} \bs{\Sigma} \bs{J}^\intercal \right)
+	\end{aligned}
+	\end{equation}
+
+The model parameter $\theta$ represented four fully connected layers of width 512; the four layers were complemented by a residual connection, which was a single fully connected layer.  We used rectified linear units (ReLU) as output nonlinearities. Next, four fully connected, linear layers each mapped the 512-dimensional output into vectors of dimension 16, 32, 8, and 1. These vectors were then reshaped into tensors and used as $\bs A$, $\bs B$, $\bs C$, and $o$.
+
+% --- 2
+\subsection{Meta model}
+
+Our meta model was defined as a Gaussian distribution $Q(S^\prime|S=\bs{s}; \psi) = \mathcal N(\bs{\mu}^\prime, \bs{\Sigma}^\prime; \psi)$, where the mean $\bs{\mu}^\prime$ and covariance matrix $\bs{\Sigma}^\prime$ are outputs of a neural network parametrised by $\psi$. Specifically, to construct the covariance matrix, we used the fact that the eigendecomposition of a positive semi-definite matrix always exists. This then means we can use neural networks to specify an orthogonal matrix $\bs H$ and a diagonal matrix $\bs D$, such that the covariance matrix is equivalent to:
+%
+	\begin{equation}
+	\begin{aligned} \label{eq:imp-mmcov}
+	\bs{\Sigma}^\prime &= \bs{H} \bs{D} \bs{H}^\intercal, \;\; \bs{D} = \mathrm{diag}(\bs{d}) \\
+	\bs{H} &= \bs{I} - 2\frac{\bs{uu}^\intercal}{\norm{\bs{u}}^2},
+	\end{aligned}
+	\end{equation}
+%
+where $\bs{d}$ is a positive-valued vector that specifies the diagonal elements of $\bs D$. The second line of Equation \ref{eq:imp-mmcov} shows how an orthogonal matrix can be built from a real-valued vector $\bs u$, called Householder vector \citep{householderflow}. $\bs I$ is an identity matrix. 
+
+The network architecture used to compute $\mu^\prime$, $\bs d$, and $\bs u$ consisted of three trainable layers, each of which was identically structured. Three fully connected layers with ReLU activation functions, complemented by a residual connection, were followed by a linear, fully connected output layer. The output layer for $\bs d$ used a Softplus nonlinearity to ensure positive values.
+
+We can, of course, let the neural network output a full matrix $\bs X$ and have $\bs\Sigma^\prime=\bs{XX}^\intercal$. However, our method is less costly when scaling up the problem dimension.
+
+\subsection{Policy and value functions}
+
+Both the policy and value functions were identically structured in terms of network architecture. They consisted of four fully connected layers with ReLU activation functions, complemented by a residual connection. This was then followed by a linear output layer. The outputs for the policy network were treated as logits of a categorical distribution over action space. 
+
+%\subsection{Training} 
+%
+%Whenever possible, e.g., employing Experience Replay, gradients of the objective may be weighted by the probability ratio $P(\bs{s}^\prime|\bs{a}, \bs{s}; \theta^{(\ell+1)}) / {P(\bs{s}^\prime|\bs{a}, \bs{s}; \theta^{(\ell)})}$, where the superscripts $(\ell+1)$ and $(\ell)$ indicate forward model parameters after and before gradient updates. This procedure encourages boredom to be properly induced in accordance with forward model learning.
+
+
+\section{Experiment}
+
+One testable hypothesis that emerges from our previous remark---that boredom gives rise to novelty seeking policy (cf. KL-divergence term in Equation \ref{eq:hetero})---is that {\it boredom helps improve agent's forward model learning}. This is because novelty seeking essentially implies diversity in agent's experience. In other words, a boredom-driven curious agent must exhibit a tendency towards {\it exploration} and against {\it perseveration}. This tendency is critical when the agent was not given a training set (on which it based its forward model learning) but has to self-assist in accumulating one from scratch. 
+
+Briefly, an agent that tends to explore would appear to accumulate experience that reflects a more complete picture of the environment and, therefore, leads to a more accurate forward model. By contrast, if an agent perseverates, it can only afford to occupy a limited set of states, leaving its forward model an inadequate representation of the environment.
+
+The primary goal and purpose of the ensuing experiments is thus to illustrate, with and without boredom, (1) the extent to which an agent explores and perseverates, and (2) the forward model performance. 
+
+To this end, we motivated a model pruning hierarchy on which the comparisons above were based. The model pruning hierarchy, as summarised in Table \ref{tab:model-prune} and Section \ref{subsec:mod-prune}, provides a principled way to assess agent's behaviour by progressive degrading model components. As a result, the difference between a boredom agent and a boredom-free curious agent or non-curious agent can be highlighted. 
+
+Explorativeness and perseveration were assessed qualitatively using Coverage Rate (CR) and Coverage Entropy (CE), reported in Section \ref{sec:results}. CR simply counts the number of states an agent has visited amongst all possible states. CE focuses on weighing the number of time steps a state was being occupied. CR thus indicates the proportion of the environment explored by the agent. Whereas, a CE curve declining over time indicates the agent tends to perseverate around a limited state space.
+
+Forward model performance was assessed based on validation error. The validation set was sampled from the oracle dataset (see Section \ref{subsec:oracle}). Contrary to self-assisted data accumulation, the oracle dataset was acquired by uniformly sampling the state-action grid. This dataset is therefore an idealised case to learn the best possible forward model. 
+
+Overall, we set the following constraints on training and environment conditions: (1) agent is responsible for assembling its own training set from scratch; (2) the probability of visiting different states is not uniformly distributed if the agent will commit to random walk; (3) the amount of time to accumulate training data points is limited. 
+
+\subsection{Training environment}
+
+Our agents were tested in a physics simulator, free of stochasticity, built to expand the classical Mountain Car environment (e.g., `MountainCar-v0' included in \citet{aigym}) into two-dimensional state space. The environment is analogous to the Mountain Car in ways that it has attractors and repellers that resemble hill- and valley-like landscapes (Figure \ref{fig:env}). The presence of both structures serves as acceleration modifier to the agent. This makes state visitation biased toward attractors. Therefore, the acquisition of an accurate forward model necessitates planning visits to the vicinity of repellers.
+
+The states an agent can occupy were defined as the tuple $(x, y, \dot x, \dot y)$ in continuous real space. Positions $(x, y) \in [0, 1]^2$ were bounded in a unit square, whereas velocities $(\dot x, \dot y)$ were not. Boundary condition resets $x$ and $y$ to zero velocities. However, it is possible for the agent to slide along the boundaries if its action goes in the direction parallel to the nearby boundary. We note that being trapped in the corners is possible; though an agent could potentially get itself unstuck if appropriate actions were carried out. 
+
+Agent's action policy was represented by a categorical distribution over accelerations in $x$ and $y$ directions. The distribution was defined on the interval $[-2.0, 2.0]^2$, evenly divided into a $11\times 11$ grid. When an action is selected, the corresponding acceleration is modified according to forces exerted by the attractors and repellers.
+
+Unlike the classical Mountain Car, our environment does not express external rewards, nor does it possess any states that are indicative of termination. Agents were allowed a pre-defined time limit ($T=30,000$ steps; {\it Data Accumulation Phase} or DAP) to act without interruption. Agent's experiences in terms of state transitions were collected in a database, which was sampled from for training at each step. During DAP, learning rates for model parameters remained constant. After DAP (or {\it post}-DAP), agent entered an action-free stage lasted for $T=30,000$, during which only sampling from own experience pool for forward model training was performed. Learning rate scheduling scheme was implemented at post-DAP.
+
+An implementation of our training environment is available online \footnote{https://github.com/arayabrain/MountainCar2D}.
+
+\subsection{Oracle dataset} \label{subsec:oracle}
+
+To contrast with self-assisted data accumulation, we constructed an oracle dataset. This dataset assumed unbiased state occupancy and action selection. We acquired the dataset by evenly dividing the state-action space into a $49 \times 49 \times 11 \times 11 \times 11 \times 11$ grid. Each state-action pair was passed to the physics simulator to evaluate the next state. The resultant tuple $(\bs s, \bs a, \bs s^\prime)$ then represents one entry in the dataset. The training, testing, and validation sets were prepared by re-sampling the resulting dataset without replacement according to the ratio $0.8$, $0.16$, and $0.04$.
+
+A class of model referred to as Oracle, which consists of a forward model only (Table \ref{tab:model-prune}), was trained on this dataset. The Oracle model does not need to learn an action policy, as actions are already specified in the oracle dataset. The Oracle model was trained for $60,000$ epochs. During training, the learning rate was scheduled according to test error. Benchmarking was performed on the validation set as part of model comparisons (see Section \ref{subsec:modcompare}).
+
+The oracle dataset differs from the ones that are populated by an agent as it explores. For instance, some locations in the state space are essentially inaccessible to our agent due to the force exerted by the repellers. These locations greatly inform forward model learning, however, but are only present in the oracle dataset and available to the Oracle model. % Additionally, preparation of the oracle dataset neglected the fact that the agent's movement is restricted by the potential wells in the environment
+
+
+\subsection{Model pruning} \label{subsec:mod-prune}
+
+We defined five variants of our boredom-driven curious agent. With each variation, the agent receives cumulative reductions in network components. Theses reductions are summarised as model pruning hierarchy in Table \ref{tab:model-prune}. 
+
+The reason that we motivated model comparisons based on model pruning is to emphasise the contribution of boredom and curiosity in regulating agent's explorativeness and perseveration. Overall, as model pruning progresses the agent was deprived of functional constructs like devaluation progress, intrinsic motivation, and planning. Eventually, the agent lost the ability to contextualise action selection and became a random-walk object. This corresponds to an $\epsilon$-greedy policy with $\epsilon=1$. A random-walk agent is explorative but it cannot be considered curious in the sense that no principled means are applied to regulate explorative behaviours. With the model variants detailed below we intended to demonstrate the impact boredom and intrinsic motivation have on regulating exploration and, as a consequence, on forward model learning.
+
+\subsubsection{Boredom-driven curiosity (C/B)}
+
+The first agent variant retained all distinctive components introduced in Section \ref{sec:algorithm}. The meta-model provides the devaluation progress as intrinsic rewards, whilst the value function enables the agent to plan actions that are intrinsically rewarding in the long run.
+
+\subsubsection{Predictive error-driven curiosity (C/PE)}
+
+The C/PE variant tests whether the induction of boredom is a constructive form of intrinsic motivation. This is achieved by removing the meta-model, thereby requiring an alternative definition of intrinsic reward. We replaced the devaluation progress with {\it learning progress} defined by mean squared errors of the forward model:
+%
+	\begin{equation}
+	\begin{aligned}
+	R_\theta^{(\ell + 1)} 
+	&:= 
+	\mathcal{L}_{fm}(\theta^{(\ell)}) - \mathcal{L}_{fm}(\theta^{(\ell+1)}) \\
+	\mathcal{L}_{fm}(\theta)
+	&:= 
+	\mathcal{L}(\bs{s}^\prime, \bs{a}, \bs{s}; \theta) \\
+	&\phantom{:}=
+	\Vert \bs{s}^\prime - f(\bs{a}, \bs{s}; \theta) \Vert^2
+	\end{aligned}
+	\end{equation}
+%
+The construction of learning progress is one typical approach to intrinsic motivation and curiosity \citep{pathak2017icm, schmidhuber1991}.
+
+\subsubsection{Policy gradients, intrinsic reward samples (PG/IRS), Gaussian rewards (PG/GR)}
+
+Next, we examined how reward statistics alone influences policy update and, as a consequence, model learning. The value function was removed at this stage to dissociate policy learning from any downstream effects of value learning. 
+
+One distinctive feature of devaluation progress is that it entails time-varying rewards --- depending on the amount of time over which an agent has evolved in the environment. We hypothesised that the emergence of curious policy is associated with reward dynamics over time. That is to say, if one perturbs the magnitudes and directions of the policy gradients with reward statistics appropriate for the ongoing time frame, the agent should exhibit similar curious behaviours. Nevertheless, we argue that such treatment is only sensible given virtually identical initial conditions. Specifically, all agent variants shared the same, environmental configuration, initial position, and network initialisation.
+
+To this end, we prepared a database for intrinsic reward samples. During C/B performance, all reward samples were collected and labelled with the corresponding time step. Afterwards, the PG/IRS agents randomly sampled from the database in a temporally synchronised manner and applied standard policy gradients.
+
+The PG/IRS was contrasted with the PG/GR variant. Their difference lies in that a surrogate reward was used in place of the database. We defined the surrogate reward as a Gaussian distribution with time-invariant parameters, in which the mean $\mu=0$ is under the assumption of equilibrium devaluation progress and the standard deviation $\sigma=0.01$, as derived from the entire database.
+
+\subsubsection{Random-walk policy (P/RW)}
+
+Finally, we constructed a random-walk agent. All network components, apart from the forward model, were removed. This agent variant represents the case without intrinsic motivation and is agnostic to curiosity. Broadly speaking, the agent was still explorative due to its maximum entropy action policy. We regarded this version as the worse case scenario to contrast with the rest of the variants.
+
+
+\subsection{Model comparisons} \label{subsec:modcompare}
+
+All model variants were compared on the basis of validation error given the oracle dataset. We performed 128 runs for each of the six variants (Oracle, C/B, C/PE, PG/IRS, PG/GR, and P/RW). All variants, across all runs, were assigned to identical environmental configuration (e.g., initial position, attractor/repeller placements). Network components, whenever applicable, shared identical architecture and were trained with consistent batch size and learning rate. Model parameters followed the Xavier initialisation \citep{glorot}. During post-DAP, learning rate scheduling was implemented such that a factor $0.1$ reduction was applied upon a 3000-epoch loss plateau.
+
+\section{Results} \label{sec:results}
+
+In this section, we offered qualitative and quantitative assessment of agent's behavioural pattern and performance across different agent variants. As established previously, an agent's performance in modelling its own environment necessarily depends on  both explorative and non-perseverative behaviours. The overall picture being delivered here is that the boredom-driven curious agent (abbrev. C/B) exhibited stronger tendency towards exploration (Figure \ref{fig:covent}A, \ref{fig:covent}B) and against perseveration (Figure \ref{fig:covent}C, \ref{fig:covent}D). In accordance with our prediction, the forward model performance was significantly better for the boredom agent, as compared with other curious or non-curious variants (Figure \ref{fig:vldprogress}, Table \ref{tab:vldprogress} and \ref{tab:stats}).
+
+% qualitative characterisation 
+We first characterised individual agent variants' qualities of being i) explorative and ii) perseverative. Active exploration is one defining attribute of curiosity \citep{2013gottlieb}, simply because it differentiates between uncertain and known situations, thus giving rise to effective information acquisition. This, however, should be complemented with suppressed perseveration; namely, to prevent oneself from being permanently or dynamically captured---i.e., by the corners or the attractor. 
+
+The two qualities can be distinguished, as shown in Figure \ref{fig:covent}, by respective measures of Coverage Rate (CR) and Coverage Entropy (CE). The two measures were computed by first turning the state space into a $50\times 50$ grid, ignoring velocities. CR keeps track of whether or not a grid cell has been visited and, at each time step, corresponds to the proportion of visited grid cells. A CR curve increasing over time indicates that an agent would be exploring new grid cells. 
+
+CE, on the other hand, accounts for the number of time steps an agent revisited one grid cell. This then gives an empirical probability distribution at each time step that reports the likelihood of finding an agent occupying a grid cell. A concentrated probability distribution means an agent only paid visit to a small set of grid cells and, as a result, the probability distribution has low entropy.
+
+Because (state) visitation bias was inherent in our training environment, naturally, agents occupying a subset of states would cause CE to reduce faster than those who attempted to escape. The C/B, C/PE, and PG/IRS variants were regarded as curious and intrinsically motivated. Our results showed that these variants were predominantly explorative and non-perseverative. By contrast, the P/RW agent, albeit explorative, had no principled means to escape the potential well. However, if $t\to\infty$ the P/RW should be able to explore further by chance. The PG/GR variant, on the other hand, exhibited, intermediate explorativeness and extreme perseverance with disproportionately high variance. We attributed this behaviour to the detrimental effects of inappropriately informative reward statistics. 
+
+% quantitative characterisation 
+Next, we benchmarked forward model performance of individual variants by their validation loss and error percentage. We reported DAP and post-DAP performances separately as a function of time in Figure \ref{fig:vldprogress}. Error percentage was calculated as the percent ratio between root mean squared loss and the maximum pair-wise Euclidean distance in the validation set. This ratio can be summarised by $\Vert \bs s^\prime_k - f(\bs a_k, \bs s_k; \theta) \Vert / \max_{i, j}\Vert \mathcal D_i - \mathcal D_j \Vert$, where $\mathcal D$ is the validation set and $(\bs s^\prime_k, \bs a_k, \bs s_k) \in \mathcal D$.
+
+The Oracle model, trained under the supervision of oracle training set, reached an error percentage of $0.84\%$ for both DAP and post-DAP, amounting to approximately 30\% improvement over the terminal performance of the C/B variant. All variants considered curious (C/B, C/PE, and PG/IRS) had similar performances during DAP. In particular, the PG/IRS, which received independent intervention from the `true' reward distributions achieved marginally lower performance but indistinguishable from the C/PE variant. This outcome was observed for both DAP and post-DAP, suggesting intrinsic reward samples derived from C/B contributed favourably even to the standard policy gradients algorithm. 
+
+Though without the ability to approximate value function, the PG/IRS variant underperformed in benchmarking, as compared with the value-enabled, C/B variant. Using non-parametric test, the difference was detected for DAP ($p=$ 0.0006) and post-DAP ($p=$ 6.4E-8), respectively. Similar observations were also made for comparisons between C/B and C/PE, at $p=$ 0.0029 (DAP) and $p=$ 5.9E-5 (post-DAP). Overall, this suggested significant differences in the experiences accumulated across agent variants. The aforementioned statistics were reported in Table \ref{tab:vldprogress} and \ref{tab:stats}.
+
+\section{Limitation}
+
+One obvious limitation of the proposed method is scalability. We imposed Gaussian assumption on the forward model and meta-model because this lends the KL-divergence between the two to have a closed form solution. However, this solution depends on both matrix inversion and log-determinant, whose computational complexity normally falls around an order of 3 when using Cholesky decomposition. To circumvent this limitation, the intrinsic reward (devaluation progress) may be replaced with one based on (forward model) prediction error at the expense of lesser curiosity.
+
+The Gaussian assumption also puts limitations on the expressiveness of the models. This can be slightly relaxed to admit Gaussian mixture models. KL-divergence between Gaussian mixture models is not tractable but can nonetheless be approximated (e.g., \cite{hershey2007approximating}). Alternatively, employing normalising flows \citep{rezende2015variational} also allows expressive models. Calculating KL-divergence in this case is typically resorted to Monte Carlo approximation. These are potential extensions that can be applied to the current work in the future.
+
+\section{Conclusion}
+
+We have provided a formal account on the emergence of boredom from an information-seeking perspective and addressed its constructive role in enabling curious behaviour. Boredom thus motivated an instrumental view of action selection, in which an action serves to disclose outcomes that have intrinsic meaningfulness to an agent itself. This is, a bored agent must seek out information worth assimilating into itself. This led to the central claim of this study---pertaining to superior data-gathering efficiency and hence effective curiosity. We supported this claim with empirical evidence, showing that boredom-enabled agents consistently outperformed other curious agents in self-assisted forward model learning. Our results solicited the interpretation that the relationship between homeostatic and heterostatic intrinsic motivations can in fact be complementary; therefore, we have offered one unifying perspective for the intrinsic motivation landscape.
+
+Our proposed method is general in formalisation and sits comfortably with existing MDP problems. Our future work is then to apply the method to more complex problems, such as embedding into a robot for real-world scenarios.
+
+\section*{Conflict of Interest Statement}
+
+The authors declare that the research was conducted in the absence of any commercial or financial relationships that could be construed as a potential conflict of interest. All authors were employed by Araya, Inc.
+
+\section*{Author Contributions}
+YY conceived of this study, performed the experiments, and wrote the first draft of the manuscript. AYCC programmed the physics simulator, wrote part of Introduction, and created Figure \ref{fig:intuition}. All authors contributed to manuscript revision, read and approved the submitted version.
+
+\section*{Funding}
+This study was funded by the Japan Science and Technology Agency (JST) under CREST grant number JPMJCR15E2.
+
+\section*{Acknowledgements}
+YY would like to thank Martin Biehl and Ildefons Magrans de Abril for insightful discussions.
+
+%\section*{Supplemental Data}
+% \href{http://home.frontiersin.org/about/author-guidelines#SupplementaryMaterial}{Supplementary Material} should be uploaded separately on submission, if there are Supplementary Figures, please include the caption in the same file as the figure. LaTeX Supplementary Material templates can be found in the Frontiers LaTeX folder.
+
+% \section*{Data Availability Statement}
+% The datasets [GENERATED/ANALYZED] for this study can be found in the [NAME OF REPOSITORY] [LINK].
+% Please see the availability of data guidelines for more information, at https://www.frontiersin.org/about/author-guidelines#AvailabilityofData
+
+\bibliographystyle{frontiersinSCNS_ENG_HUMS}
+\bibliography{ms}
+
+%%% Make sure to upload the bib file along with the tex file and PDF
+%%% Please see the test.bib file for some examples of references
+
+%%% --- -------------- -------------- -------------- -------------- -------------- -------------- --- %%%
+
+\section*{Figure captions}
+
+\begin{figure}[bh!]
+	\begin{center}
+	\includegraphics[width=10.5cm]{algo-intuition-v1}
+	\end{center}
+	\caption{Intuitive understanding of the Homeo-Heterostatic Value Gradients (HHVG) algorithm. [A] The algorithm can be interpreted as the cooperative interplay between a thrower (kid; blue) and a catcher (dog; red). The thrower is equipped with a forward model that estimates its aiming and is controlled by an action policy. Without knowing the thrower's policy, the catcher (meta-model), in order to make good catches, infers where the thrower is aiming on average. [B] The catcher is interested in novel, unpredicted throws. Whenever the catcher improves its predictive power some intrinsic reward (devaluation progress) is generated. [C] As the catcher progresses further, similar throws become highly predictable, thus inducing a sense of boredom. [D] To make the interplay interesting again, the thrower is driven to devise new throws, so that the catcher can afford to make further progress. By repeating [A--B] the thrower has attempted diverse throws and known well about its aim. At the same time, the catcher will assume a vantage point for any throw.}
+	\label{fig:intuition}
+\end{figure}
+
+%\begin{figure}[bh!]
+%	\begin{center}
+%	\includegraphics[width=6cm]{diagram-cognition-v0}
+%	\end{center}
+%	\caption{Cognition of the boredom-driven agent. Given current state $S=\bs{s}$, the agent holds a probability density over action $\Pr(A)$, which has information about future state $S^\prime$. This information is encoded by (policy) network weights $\varphi$. Additionally, the agent holds a {\it meta} or marginalised belief over $S^\prime$: $\mathcal{P}(\bar{S}^\prime; \psi) := \sum_A \Pr(S^\prime, A | S=\bs{s})$. {\it Boredom} is induced upon information about $S^\prime$ being transferred from $A$ to $\bar{S}^\prime$. This implies that if $\bar{S}^\prime$ already has what information $A$ possesses about $S^\prime$ then $A$ is rendered redundant. For a boredom-driven agent to be implicitly curious it needs to update $A$ such that action brings about novel outcomes that are otherwise unknown to the meta-belief.}
+%	\label{fig:fig-information}
+%\end{figure}
+
+\begin{figure}[bh!]
+	\begin{center}
+	\includegraphics[width=8cm]{diagram-environment-v0}
+	\end{center}
+	\caption{Environmental configuration. The red cross represents attractor, whilst black triangles repellers. Vector plots indicate the forces exerted if the agent assumed the positions with zero velocities. The initial position is set at the blue letter `A'. This configuration remains identical cross all model variants and test runs.}
+	\label{fig:env}
+\end{figure}
+
+\begin{figure}[bh!]
+	\begin{center}
+	\includegraphics[width=18cm]{tsplot-agnt-covent-v1}
+	\end{center}
+	\caption{Coverage Rate (CR) and Coverage Entropy (CE) by agent variants. The two measures were computed by first turning the state space into a $50\times 50$ grid, ignoring velocities. CR then marks over time whether or not a cell has been visited. Whereas, CE treats the grid as a probability distribution. Starting with maximum entropy, CR cumulatively counts the number of times a position is being visited. Entropy was calculated at each time step using normalised counter. [A] Overview of CR shows the distinction between curious and non-curious agents. Curiosity caused the agents to explore faster. [B] Close-up on the curious agent variants, which were equally explorative. [C] Overview of CE shows agents with different levels of perseverance. The P/RW variants were captured by the attractor, whilst the PG/GR variants were prone to blockage. [D] Close-up on curious agents, which were characterised by higher CE due to attractor avoidance and more frequent repeller visitation attempts. Shaded regions represent one standard deviation.}
+	\label{fig:covent}
+\end{figure}
+
+\begin{figure}[bh!]
+	\begin{center}
+	\includegraphics[width=18cm]{tsplot-join-vldprogress-v1}
+	\end{center}
+	\caption{Benchmarking model variants with oracle dataset. Performances were reported in error percentage (also, see Table \ref{tab:vldprogress}). [A] Performance as a function of time during Data Accumulation Phase (DAP). [B] Close-up on curious variants (C/B, C/PE, and PG/IRS), as well as policy gradients (PG/GR) informed by surrogate reward statistics. The C/PE and PG/IRS variants performed similarly, but differed significantly from C/B (Table \ref{tab:stats}). [C] Performance over time during post-DAP. [D] Close-up on post-DAP performances for curious variants and PG/GR.}
+	\label{fig:vldprogress}
+\end{figure}
+
+%%% --- -------------- -------------- -------------- -------------- -------------- -------------- --- %%%
+
+\section*{Tables}
+
+\begin{table}[bh!]
+	\begin{center}
+	\caption{Model pruning hierarchy that helps highlight the contribution of boredom and curiosity in regulating agent's exploration and perseveration. Ticks mark the existence or dependence of trainable network component; circles indicate independent intervention. Top row: P/RW, random-walk policy; PG/GR, policy gradients with rewards drawn from Gaussian distribution; PG/IRS, policy gradients with intrinsic reward samples; C/PE, curiosity using forward model error; C/B, curiosity from boredom. First column: FM, forward model; AP, action policy;  IR, intrinsic rewards; VF, value function approximator; MM, meta-model.}
+	\label{tab:model-prune}
+	\begin{tabular}{r c c c c c c}
+	\toprule
+	& Oracle & P/RW & PG/GR & PG/IRS & C/PE & C/B \\ 
+	\midrule
+	FM & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\ 
+	AP &  & $\bigcirc$  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\ 
+	IR &  &  &  & $\bigcirc$ & $\checkmark$ & $\checkmark$ \\ 
+	VF &  &  &  &  & $\checkmark$ & $\checkmark$ \\ 
+	MM &  &  &  &  &  & $\checkmark$ \\ 
+	\bottomrule
+	\end{tabular} 
+	\end{center}
+\end{table}
+
+\begin{table}[bh!]
+	\begin{center}
+	\caption{Summary statistics on validation loss and error percentage as benchmarking scores. Apart from the Oracle model, a trend of declining scores can be observed as the agent degraded from C/B to P/RW, indicating the contribution of boredom and curiosity in model learning. Key: DAP, Data Accumulation Phase; SD, standard deviation. For agent codes, see Table \ref{tab:model-prune}.}
+	\label{tab:vldprogress}
+	\begin{tabular}{r l p{2.3cm} | l p{2.3cm}}
+	\toprule
+	\multirow{2}{*}{Agent} & \multicolumn{2}{c}{DAP} & \multicolumn{2}{c}{Post-DAP} \\
+	\cline{2-5} \\
+	& MSE loss (SD) & Mean Percent Error (SD) & MSE loss (SD) & Mean Percent Error (SD) \\
+	\midrule
+	\multirow{2}{*}{Oracle}
+			 & 0.0008   & 0.8430   & 0.0008   & 0.8428   \\
+		     & (2.3E-5) & (0.0123) & (2.2E-5) & (0.0114) \\
+	\multirow{2}{*}{C/B}
+			 & 0.0033   & 1.7181   & 0.0017   & 1.2420   \\
+			 & (0.0006) & (0.1357) & (0.0001) & (0.0488) \\
+	\multirow{2}{*}{C/PE}
+			 & 0.0035   & 1.7611   & 0.0019   & 1.2882   \\	
+			 & (0.0006) & (0.1464) & (0.0003) & (0.0916) \\
+	\multirow{2}{*}{PG/IRS}
+			 & 0.0035   & 1.7637   & 0.0020   & 1.2976   \\
+			 & (0.0006) & (0.1418) & (0.0003) & (0.0902) \\
+	\multirow{2}{*}{PG/GR}
+			 & 0.0048   & 2.0559   & 0.0030   & 1.6288   \\
+			 & (0.0017) & (0.3026) & (0.0008) & (0.2140) \\
+	\multirow{2}{*}{P/RW}
+			 & 0.6663   & 22.2734   & 0.6615   & 22.1453   \\
+			 & (0.3904) & (10.0085) & (0.3864) & (10.0775) \\
+	\bottomrule
+	\end{tabular}
+	\end{center}
+\end{table}
+
+\begin{table}[bh!]
+	\begin{center}
+	\caption{Non-parametric statistical tests comparing terminal performance at DAP and post-DAP for curious model variants. Following Table \ref{tab:vldprogress}, even though the boredom score came close to other curious variants (C/PE and PG/IRS), the boredom variant still outperformed the other two on statistical grounds.}
+	\label{tab:stats}
+	\begin{tabular}{c c c c}
+	\multicolumn{4}{c}{Mann-Whitney U Test ($n=128, \alpha=0.025$, Bonferroni corrected)} \\
+	\toprule
+	\multicolumn{2}{c}{Validation loss}
+	& DAP ($T=30000$) & Post-DAP ($T=60000$) \\
+	\midrule
+	\multirow{2}{*}{C/B $<$ C/PE} 
+		& Statistics    & 6558.0 & 5911.0 \\
+		& {\it p}-value & 0.0029 & 5.9E-5 \\ 
+	\multirow{2}{*}{C/B $<$ PG/IRS} 
+		& Statistics    & 6275.0 & 5062.0 \\
+		& {\it p}-value & 0.0006 & 6.4E-8 \\
+	\bottomrule
+	\end{tabular}
+	\end{center}
+\end{table}
+
+%%% --- -------------- -------------- -------------- -------------- -------------- -------------- --- %%%
+
+\section*{Algorithms}
+
+\begin{algorithm}[th!]
+	\caption{Homeo-heterostatic value gradients}
+	\label{alg:hhvg}
+	\begin{algorithmic}[1]
+		\State \textbf{Variables} \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent 
+			outer loop time $t$ \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent 
+			gradient step counter $\ell, i, j, k$ \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent 
+			state $\bs{s}^t := \bs{s}(t)$ and action $\bs{a}^t := \bs{a}(t)$ \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent 
+			learning rate $\lambda^\theta, \lambda^\psi, \lambda^\nu, \lambda^\varphi$ \par 
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent discount factor 
+			$\gamma$ \par 
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent 
+			experience pool $\mathcal D$
+
+		\State \textbf{Models and parameters} \par 
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent 
+			forward model $P(S^\prime|\bs{s}, \bs{a}; \theta)$ \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent 
+			meta-model $Q(S^\prime|\bs{s};\psi)$ \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent 
+			value approximator $v(\bs{s}; \nu)$ \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent 
+			action policy $\pi(A|\bs{s}; \varphi)$
+
+		\State \textbf{Objectives} \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent
+			forward-model learning $\mathcal{L}_{fm}(\theta)$ \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent
+			meta-model learning $\mathcal{L}_{mm}(\psi)$ \Comment{Eq.\ref{eq:mm-loss}} \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent
+			value learning $\mathcal{L}_{vf}(\nu)$ \Comment{Eq.\ref{eq:vf-loss}} \par
+		\Statex \hskip\algorithmicindent\hskip\algorithmicindent
+			policy learning $\mathcal{L}_{ap}(\varphi)$ \Comment{Eq.\ref{eq:policy-loss}} \par
+		
+		\For {$t=0\dots T$}
+		\State From $\bs{s}^t$, sample action $\bs{a}^t \sim \pi(\cdot | \bs{s}^t;\varphi)$
+		\State Perform $\bs{a}^t$ and advance to $\bs{s}^{t+1}$
+		\State Insert tuple $\left( \bs{s}^t, \bs{a}^t, \pi(\bs{a}^t|\bs{s}^t), \bs{s}^{t+1} \right)$ into $\mathcal D$
+		
+		\State Sample $\mathcal D$ and train forward model: \par
+		\State \hskip\algorithmicindent 
+			$\mathcal{L}_{fm}(\theta) := 
+			\mathcal{L}(\bs{s}^\prime, \bs{a}, \bs{s}; \theta) = 
+			\Vert \bs{s}^\prime - f(\bs{a}, \bs{s}; \theta) \Vert^2$ \Comment{Eq.\ref{eq:imp-fm}}\par
+		\State \hskip\algorithmicindent 
+			$\theta^{(\ell+1)} \gets \theta^{(\ell)} - 
+			\lambda_\theta \nabla_\theta \mathcal{L}_{fm}(\theta^{(\ell)})$ \par
+		
+		\State Value learning ($M$ updates, see Algorithm \ref{alg:fpeval})
+		
+		\State Sample $\mathcal D$ and perform devaluation: \par
+		\State \hskip\algorithmicindent 
+		$\psi^{(i+1)} \gets \psi^{(i)} - 
+		\lambda_\psi \nabla_\psi \mathcal{L}_{mm}(\psi^{(i)})$
+		
+		
+		\State Sample $\mathcal D$ and train action policy:
+		\State \hskip\algorithmicindent
+			evaluate $R_\psi^{(i+1)} = \mathcal{L}_{mm}(\psi^{(i)}) - 
+			\mathcal{L}_{mm}(\psi^{(i+1)})$  \par 
+		\State \hskip\algorithmicindent 
+			evaluate $v^\prime = v(\bs{s}^\prime; \nu^{(j+M)})$ \par
+		\State \hskip\algorithmicindent 
+			$w \gets \pi(\bs{a}|\bs{s};\varphi^{(k)}) / {\pi(\bs{a}|\bs{s};\varphi^{(<k)})}$ 
+		\State \hskip\algorithmicindent 
+			$\varphi^{(k+1)} \gets \varphi^{(k)} + \lambda^\varphi \nabla_\varphi w \mathcal{L}_{ap}(\varphi^{(k)})$
+			given $R_\psi^{(i+1)}$, $v^\prime$
+		\EndFor
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[th!]
+	\caption{Fitted Policy Evaluation (cf. \citet{svg})}
+	\label{alg:fpeval}
+	\begin{algorithmic}[1]
+		\State \textbf{Given} \par 
+		\hskip\algorithmicindent outer loop time $t$ \par 
+		\hskip\algorithmicindent experience pool $\mathcal D$ \par 
+		\hskip\algorithmicindent value function $v(\bs{s}; \nu^{(j)})$ \par 
+		\hskip\algorithmicindent gradient step counter $i$, $j$, $k$
+		\State Clone parameter $\tilde\nu \gets \nu^{(j)}$
+		\For {$m = 1\dots M$}
+		\State Sample 
+			$\left(\bs{s}^\tau, \bs{a}^\tau, \pi(\bs{a}^\tau|\bs{s}^\tau; \varphi^{(<k)}), 	\bs{s}^{\tau+1}\right)$ 
+			from $\mathcal D$ ($\tau < t$)
+		\State Evaluate 
+			$R_\psi^{(i+1)}=\mathcal{L}_{mm}(\psi^{(i)}) - \mathcal{L}_{mm}(\psi^{(i+1)})$
+		\State $y = R_\psi^{(i+1)} + \gamma v(\bs{s}^{\tau+1}; \tilde\nu)$ 
+		\State $w = \pi(\bs{a}^\tau|\bs{s}^\tau;\varphi^{(k)}) / {\pi(\bs{a}^\tau|\bs{s}^\tau;\varphi^{(<k)})}$
+		\State Apply updates 
+			$\nu^{(j+m)} \gets \nu^{(j+m-1)} - 
+			\nabla_\nu \frac w2 \left( y - v(\bs{s}; \nu^{(j+m-1)})\right)^2$
+		\State Every $C$ updates, $\tilde\nu \gets \nu^{(j+m)}$
+		\EndFor
+	\end{algorithmic}
+\end{algorithm}
+%%% --- -------------- -------------- -------------- -------------- -------------- ----------------- %%%
+
+%%% If you are submitting a figure with subfigures please combine these into one image file with part labels integrated.
+%%% If you don't add the figures in the LaTeX files, please upload them when submitting the article.
+%%% Frontiers will add the figures at the end of the provisional pdf automatically
+%%% The use of LaTeX coding to draw Diagrams/Figures/Structures should be avoided. They should be external callouts including graphics.
+
+\end{document}
