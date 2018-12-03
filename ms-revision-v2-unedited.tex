@@ -6,7 +6,6 @@
 \documentclass[utf8]{frontiersSCNS}
 
 \usepackage{url,hyperref,lineno,microtype,subcaption}
-% \usepackage{url,hyperref,microtype,subcaption}
 \usepackage[onehalfspacing]{setspace}
 \usepackage{amssymb}
 \usepackage{amsmath}
@@ -25,13 +24,7 @@
 \newcommand{\bs}{\boldsymbol}
 \newcommand{\argmax}{\arg\max}
 
-
-% \newcommand{\revisionAnchor}[1]{\phantomsection~\label{#1}}
-% \usepackage[pagewise]{lineno}
-
-
 \linenumbers
-
 
 
 % Leave a blank line between paragraphs instead of using \\
@@ -79,22 +72,11 @@ In this study, we present an instrumental view of action selection, in which an 
 
 Animal studies have shown that learning stimulus-response (S-R) association through action-outcome reinforcement is but one facet of instrumental behaviour. Internally, animals may build models that assign values to reappraise experienced outcomes. This expands the landscape of instrumental behaviour to include stimulus-outcome-response (S-O-R) learning system---or goal-directed learning \citep{Balleine.1998}. Goal-directed behaviour is known in both empirical and computational approaches to support adaptive and optimal action selection \citep{adams1981instrumental, adams1982variations, mannella2016goal}. Central to such behavioural adaptiveness is devaluation. This means for a given action-outcome pair the associated reinforcing signal is no longer monotonic. Instead, outcome value varies under reappraisal within according to their relevance to or attainment of goal. 
 
-One classic paradigm of devaluation manipulates agent's level of satiation based on food accessibility, leading to altered behavioural pattern. In the context of epistemic disclosure, an analogy can be drawn between devaluation and the emergence of boredom, in which one's assimilation of knowledge reduces the value of similar knowledge in future encounter. The relationship between boredom and outcome devaluation has a long history in psychological research. Empirical findings indicated that boredom is reportedly accompanied by negative affective experience, suggesting that experienced outcomes are intrinsically evaluated and considered as less valuable \citep{bench2013function, van2012boredom, fahlman2009does, perkins1985cognitive, vodanovich1991boredom}. 
-% =============================== about arousal ============================== %
-\label{rev:arousal}Psychophysiological studies have shown that boredom accompanies increase \citep{berlyne1960conflict, london1972increase, harris2000correlates} or decrease \citep{barmack1939definition, geiwitz1966structure, pattyn2008psychophysiological, vogel2012definition, mikulas1993essence} of physiological and psychological arousal (or both; see \cite{eastwood2012unengaged, fahlman2013development, Merrifield2014, Danckert.2018}). Even though the potential underline psychophysiological mechanisms are still under debate, the high arousal states elicited by boredom suggest that boredom may play an active role of information-seeking behaviour. Subjects showing higher levels of reported boredom are accompanied by increased autonomic arousal, such as heart rate and galvanic skin response. These findings is in line with our key notion that boredom intrinsically and actively drives agents learning behaviours. 
-% ============================= about creativity ============================= %
-Based on our notion, we also postulate that boredom promote agents to perform creative behaviors via disengaging from low-information-gain-environments and engaging in creative activities \citep{harris2000correlates, schubert1977boredom, schubert1978creativity}. This suggests that the presence of boredom serves to reconfigure agent's instrumental device in order to escape devalued states (but not in all conditions, see \cite{larson1990emotions}).
-
-\phantomsection\label{rev:creativity}
-% cite this and say the difference 
-Gomez-Ramirez2017
-
+One classic paradigm of devaluation manipulates agent's level of satiation based on food accessibility, leading to altered behavioural pattern. In the context of epistemic disclosure, an analogy can be drawn between devaluation and the emergence of boredom, in which one's assimilation of knowledge reduces the value of similar knowledge in future encounter. The relationship between boredom and outcome devaluation has a long history in psychological research. Empirical findings indicated that boredom is reportedly accompanied by negative affective experience, suggesting that experienced outcomes are intrinsically evaluated and considered as less valuable \citep{bench2013function, van2012boredom, fahlman2009does, perkins1985cognitive, vodanovich1991boredom}. Psychophysiological studies also demonstrated that boredom plays an active role of information-seeking behaviour. Subjects showing higher levels of reported boredom are accompanied by increased autonomic arousal, such as heart rate and galvanic skin response. These findings is in line with our key notion that boredom intrinsically and actively drives agents learning behaviours \citep{london1972increase, harris2000correlates}. Consistent with our argument, evidence also showed that boredom is associated with increase in creativity \citep{harris2000correlates, schubert1977boredom, schubert1978creativity}. This suggests that the presence of boredom serves to reconfigure agent's instrumental device in order to escape devalued states.
 
 Curiosity, irrespective of being a by-product of external goal-attainment or an implicit goal in and of agent itself, is often ascribed as a correlate of information-seeking behaviour \citep{2013gottlieb}. Behaviours exhibiting curious quality are observed in humans and animals alike, suggesting an universal role of curiosity in shaping one's fitness in terms of survival chance. Though the exact neural mechanism underlying the emergence of curious behaviour still remains obscure, current paradigms have their focus on (1) novelty disclosure and (2) uncertainty reduction aspects of information-seeking \citep{pathak2017icm, friston2017curiosity, bellemare2016count, ostrovski2017count}. Indeed, both aspects can be argued to improve agent's fitness in epistemic landscape if the agent elects to incorporate the novelty or uncertainty.
 
-% ======================== homeostatic vs heterostatic ======================= %
-\label{rev:HomoVsHetero}In the literature, a dichotomy between homeostatic and heterostatic motivations was proposed \citep{intrinsicmotiv}. A homeostatic motivation encourages an organism to occupy a set of predictable, unsurprising states (i.e., a {\it comfort zone}). Whereas, a heterostatic motivation does the opposite. Although one can often find that boredom is associasted with fulfilling homeostatic motivation and curiosity is associated with heterostatic motivation, our argument suggests they can in fact be complementary. Our contribution thus pertains to the reconciliation of homeo-heterostatic motivations.
-
+In intrinsic motivation literature \citep{intrinsicmotiv}, although one can readily associate boredom with homeostatic motivation and curiosity with heterostatic motivation, our argument suggests they can in fact be complementary. Our contribution thus pertains to the reconciliation of homeo-heterostatic motivations.
 
 \section{Markov Decision Process}
 
@@ -123,7 +105,7 @@ When differentiable forward model and reward function are both available, policy
 
 \section{Homeo-Heterostatic Value Gradients} \label{sec:algorithm}
 
-\label{rev:HomoVsHetero2}This section describes formally the algorithmic structure and components of the Homeo-Heterostatic Value Gradients, or HHVG. The naming of HHVG suggests its connections with homeostatic and heterostatic intrinsic motivations. (A detailed review on homeostatic and heterostatic motivations are given in \cite{intrinsicmotiv})
+This section describes formally the algorithmic structure and components of the Homeo-Heterostatic Value Gradients, or HHVG. The naming of HHVG suggests its connections with homeostatic and heterostatic intrinsic motivations. A detailed review on homeostatic and heterostatic motivations are given in \cite{intrinsicmotiv}. Briefly, a homeostatic motivation encourages an organism to occupy a set of predictable, unsurprising states (i.e., a {\it comfort zone}). Whereas, a heterostatic motivation does the opposite; curiosity belongs to this category. 
 
 The algorithm offers reconciliation between the two seemingly opposite qualities and concludes with their cooperative nature. Specifically, the knowledge an organism maintains about its comfort zone helps instigate outbound heterostatic drives. In return, satisfying heterostatic drives broadens the organism's extent of comfort zone. As a consequence, the organism not only improves its fitness in terms of homeostatic outreach but also becomes effectively curious.
 
@@ -166,7 +148,6 @@ However, this naive approach would certainly lead to the agent behaving habitual
 
 Such obsession with limited outcomes poses a caveat---the agent has no recourse to inform itself about prior exposure of similar sensations. If the agent is otherwise endowed with this capacity, namely, by assimilating previous experiences into summary statistics, an ensuing sense of boredom would be induced. The induction of boredom essentially causes the agent to value the same piece of information less, thus changing the agent's perception towards interestingness. If the agent were to pursue the same interestingness-seeking policy, a downstream effect of boredom would drive the agent to seek out other information that could have been known. This conception amounts to an implicit goal of {\it devaluating} known outcomes.
 
-
 To this end, we introduce the following meta-model $Q$ to represent {\it a priori} knowledge about the future. Note that $Q$ is a conditional probability function over $S^\prime$ and is not to be confused with a state-action value function $q(\bs a, \bs s)$ in MDP. The meta-model, parametrised by $\psi$, is an approximation to the {\it true} marginalisation of joint probability $P(S^\prime, A|S=\bs{s}; \theta, \varphi)$ over $A$:
 %
 	\begin{equation}
@@ -198,7 +179,7 @@ We associate the occurrence of boredom, or, synonymously, outcome devaluation, w
 
 Through the use of KL-divergence in Equation \ref{eq:mm-loss}, we emphasise the complementary nature of devaluation in relation to a knowledge-gaining process. That is to say, devaluation results in information gain for the agent. This, in fact, can be regarded as cognitively rewarding and, thus, serves to motivate our definition of intrinsic reward. 
 
-One rewarding scenario happens when $Q(S^\prime|\bs{s}; \psi)$ has all the information there is to be possessed by $A$ about $S^\prime$. $A$ is therefore rendered redundant. One may speculate, at this point, the agent could opt for inhibiting its responses. Disengaging actions potentially saves energy which is rewarding in biological sense. \label{rev:energyPOV} This outcome is in line with the "opportunity cost model" proposed by \cite{Kurzban2013}. In this model, boredom is seen as a resource regulatory signal which drives agents to disengage the current task and stop the computational cost. In consequence, boredom encourages reallocation of computational processes to alternative higher-value activities \citep{Kurzban2013}.
+One rewarding scenario happens when $Q(S^\prime|\bs{s}; \psi)$ has all the information there is to be possessed by $A$ about $S^\prime$. $A$ is therefore rendered redundant. One may speculate, at this point, the agent could opt for inhibiting its responses. Disengaging actions potentially saves energy which is rewarding in biological sense. 
 
 Alternatively, the agent may attempt to develop new behavioural repertoires, bringing into $S^\prime$ new information (i.e., novel outcomes) that is otherwise unknown to $Q$. The ensuing sections will focus on this line of thinking.
 
@@ -564,7 +545,7 @@ YY would like to thank Martin Biehl and Ildefons Magrans de Abril for insightful
 % Please see the availability of data guidelines for more information, at https://www.frontiersin.org/about/author-guidelines#AvailabilityofData
 
 \bibliographystyle{frontiersinSCNS_ENG_HUMS}
-\bibliography{ms}
+\bibliography{ms-original}
 
 %%% Make sure to upload the bib file along with the tex file and PDF
 %%% Please see the test.bib file for some examples of references

@@ -1,9 +1,6 @@
 \documentclass[utf8]{article}
 
 
-% \usepackage[pagewise]{lineno}
-
-
 \usepackage{xr}
 \makeatletter
 \newcommand*{\addFileDependency}[1]{% argument=file name and extension
@@ -40,10 +37,12 @@
 \usepackage{float}
 \usepackage{tikz}
 \usepackage[threshold=2, autopunct=true, autostyle=true]{csquotes}
+\usepackage[colorinlistoftodos]{todonotes}
 
 % ============================================================================ %
 %                               Macros from Acer                               %
-% ============================================================================ %
+% ============================================================================ 
+% reply session
 \newenvironment{reply}  
     {\color{Blue}\noindent\newline}
     {\newline}
@@ -75,15 +74,23 @@
          
         The description of boredom early on is a fairly narrow one. Boredom is not necessarily tied to knowledge acquisition. I think here the authors are really tapping into the notion of monotony first and perhaps meaning/purpose second. A thing can be monotonous and yet lead to new knowledge (data input for example); similarly, a thing can seem meaningless to an individual but contain ample novel information (e.g., a lecture on string theory to an art historian). 
         
+        \begin{reply}
+            Thanks for the reviewer's comment. We agree that boredom, as a state signal in biological systems, is not necessarily tied to knowledge acquisition for biological agents. We also acknowledge other psychological and physiological factors which co-determine whether biological agents choose to execute information-seeking behaviors during decision making processing. In the current study, we limited our focus on the information-seeking aspect of boredom only. This allow us to precisely define boredom in the mathematical way and evaluate the efficiency of information-seeking behaviors driven by boredom.
+            
+            We understand that the reviewer concerns about our insufficient literature survey on this topic. We very appreciate the comments and suggestions from the reviewer. We have added more relevant and detailed introduction and discussion on this topic based on the reviewer's comments. Please see our replies as follows. 
+        \end{reply}
+        
+        
         In addition, the authors don't do justice to the nuanced literature on boredom and arousal. They selectively cite the high arousal camp (London et al., 1972 - they fail to cite Merrifield \& Danckert, 2014) and ignore the low arousal camp (Barmack, 1939; Geiwitz, 1966; Pattyn et al., 2008; Vogel et al., 2012). The van Tilburg work they cite also consistently shows that self-reports of boredom cast it as a low arousal subjective state. A recent publication examined this debate and claimed the boredom is likely both a high AND low arousal state (subjectively if not physiologically; Danckert et al., 2018 Consc \& Cog). Given that their current model depends on one account of boredom (as high arousal prompting exploration) I think it will be important to at least acknowledge that the boredom literature is not settled on this matter.
         
         \begin{reply}
             We appreciate this important suggestion from the reviewer. We have added more references from other camps.
-            
-            %\ref{rev:arousal}
-            \noindent
-            \textit{
-                "Psychophysiological studies have shown that boredom accompanies increase \citep{berlyne1960conflict, london1972increase, harris2000correlates} or decrease \citep{barmack1939definition, geiwitz1966structure, pattyn2008psychophysiological, vogel2012definition, mikulas1993essence} of physiological and psychological arousal (or both; see \cite{eastwood2012unengaged, fahlman2013development, Merrifield2014, Danckert.2018}). Even though the potential underline psychophysiological mechanisms are still under debate, the high arousal states elicited by boredom suggest that boredom may play an active role of information-seeking behaviour."}
+
+            \revise{\pageref{rev:arousal}}
+            % org
+                {Psychophysiological studies also demonstrated that boredom plays an active role of information-seeking behaviour. Subjects showing higher levels of reported boredom are accompanied by increased autonomic arousal, such as heart rate and galvanic skin response. These findings is in line with our key notion that boredom intrinsically and actively drives agents learning behaviours \citep{london1972increase, harris2000correlates}.}
+            % rev
+                {Psychophysiological studies have shown that boredom accompanies increase \citep{berlyne1960conflict, london1972increase, harris2000correlates} or decrease \citep{barmack1939definition, geiwitz1966structure, pattyn2008psychophysiological, vogel2012definition, mikulas1993essence} of physiological and psychological arousal (or both; see \cite{eastwood2012unengaged, fahlman2013development, Merrifield2014, Danckert.2018}). Even though the potential underline psychophysiological mechanisms are still under debate, the high arousal states elicited by boredom suggest that boredom may play an active role of information-seeking behaviour.}
         \end{reply}
         
         
@@ -96,7 +103,9 @@
             We thank for the reviewer's suggestion. We agree that, instead of a direct causal relation between boredom and creativity, boredom indirectly increases the probability for an agent to engage in creative activities. We changed our expression of this section and also added the counter-example \citep{larson1990emotions} mentioned by the reviewers in to this section.
             
             \revise{\pageref{rev:creativity}}
+            % org
                 {Consistent with our argument, evidence also showed that boredom is associated with increase in creativity \citep{harris2000correlates, schubert1977boredom, schubert1978creativity}. This suggests that the presence of boredom serves to reconfigure agent's instrumental device in order to escape devalued states.}
+            % rev
                 {Based on our notion, we also postulate that boredom may promote agents to perform creative behaviors via disengaging from low information gain environments and re-engaging in creative activities \citep{harris2000correlates, schubert1977boredom, schubert1978creativity}. This suggests that the presence of boredom serves to reconfigure agent's instrumental device in order to escape devalued states (but not in all conditions, see \cite{larson1990emotions}).}
         
 
@@ -107,25 +116,80 @@
         Which brings me to another missing piece here: Gomez-Ramirez \& Costa  (2017) (not cited in this paper) published a computational model of boredom and its relation to exploration, with a particular focus on solving the dark room problem. They titled it "Boredom begets creativity" (followed by some subtitle). I like this paper a lot but the title is misleading. Boredom begets the drive for exploration is more appropriate in my view and I think that is what is being proposed here too. But at the very least the authors would need to cite this model and differentiate themselves from it . I think they can do that (the mere notion that their model outdoes other curiosity based agents is enough for me to say this is worth publishing) - but it does need to be done. Otherwise, we're just engaging parallel lines of thinking/research and failing to talk to one another. 
         
         \begin{reply}
-            Waiting for yen
+            Thank the reviewer for providing this work closely related to our study.
+            \newline
+            \todo{Waiting for Yen}
         \end{reply}
         
         Just prior to the discussion of Markov Decision processes the authors introduce their notion that boredom is associated with homeostasis and curiosity with heterostasis. I need this to be unpacked more clearly . In my view of boredom it is a drive state arising from a feeling that one's cognitive resources are being underutilised (so the agent is understimulated and needs to do something to raise that). Think of a sustained attention task - these are inherently boring, low rate, low information tasks. As you continue doing it your arousal levels dip perhaps signalling disengagement from the task. You then have two options: do something else or try to raise arousal levels to the necessary point to successfully continue with the task. This sounds like a homeostatic motivation - but is this how the authors are considering things? It wasn't clear. And the flipside was even more opaque. 
         
         
         \begin{reply}
-            In the literature, a dichotomy between homeostatic and heterostatic motivations was proposed \citep{intrinsicmotiv}. A homeostatic motivation encourages an organism to occupy a set of predictable, unsurprising states (i.e., a {\it comfort zone}). Whereas, a heterostatic motivation does the opposite. Although one can often find that boredom is associasted with fulfilling homeostatic motivation and curiosity is associated with heterostatic motivation, our argument suggests they can in fact be complementary. Our contribution thus pertains to the reconciliation of homeo-heterostatic motivations.
+            We moved more detailed description from session "OMEO-HETEROSTATIC VALUE GRADIENTS" to this paragraph. We hope that this amendment makes our notion more clear now.
+        
+            \revise{\pageref{rev:HomoVsHetero}}
+            % org
+                {In intrinsic motivation literature \citep{intrinsicmotiv}, although one can readily associate boredom with homeostatic motivation and curiosity with heterostatic motivation, our argument suggests they can in fact be complementary. Our contribution thus pertains to the reconciliation of homeo-heterostatic motivations.}
+            % rev
+                {In the literature, a dichotomy between homeostatic and heterostatic motivations was proposed \citep{intrinsicmotiv}. A homeostatic motivation encourages an organism to occupy a set of predictable, unsurprising states (i.e., a {\it comfort zone}). Whereas, a heterostatic motivation does the opposite. Although one can often find that boredom is associasted with fulfilling homeostatic motivation and curiosity is associated with heterostatic motivation, our argument suggests they can in fact be complementary. Our contribution thus pertains to the reconciliation of homeo-heterostatic motivations.}
+                
+            \revise{\pageref{rev:HomoVsHetero2}}
+            % org
+                {This section describes formally the algorithmic structure and components of the Homeo-Heterostatic Value Gradients, or HHVG. The naming of HHVG suggests its connections with homeostatic and heterostatic intrinsic motivations. A detailed review on homeostatic and heterostatic motivations are given in \cite{intrinsicmotiv}. Briefly, a homeostatic motivation encourages an organism to occupy a set of predictable, unsurprising states (i.e., a {\it comfort zone}). Whereas, a heterostatic motivation does the opposite; curiosity belongs to this category.}
+            % Rev
+                {This section describes formally the algorithmic structure and components of the Homeo-Heterostatic Value Gradients, or HHVG. The naming of HHVG suggests its connections with homeostatic and heterostatic intrinsic motivations. (A detailed review on homeostatic and heterostatic motivations are given in \cite{intrinsicmotiv})}
+
         \end{reply}
         
         
         
         All of this brings me to another missing piece: Kurzban  et al., (2013) have a piece in Behav Brain Sci that looks at effort through the lens of opportunity costs. They touch on boredom and I think this is a model relevant to this work. Boredom, as a state regulatory signal, may arise when some calculation of opportunity costs has reached a threshold. In our sustained attention task we need to determine the value of continuing (given we agreed to be in the experiment or in the real world given the consequences of failing in a sustained attention task - think air traffic control) against the value of abandoning the task for something different. So again, this suggests that boredom prompts exploration. The authors need to incorporate this notion into their own discussion here again, to distinguish themselves from that account.  
         
+        
+        \begin{reply}
+            We agree that the concepts between the "opportunity cost model" proposed by \cite{Kurzban2013} and our model share similar point of view. We integrated this reference into our paragraph as following:
+        
+            \revise{\pageref{rev:energyPOV}}
+            % orig
+                {...Disengaging actions potentially saves energy which is rewarding in biological sense.}
+            % rev
+                {...Disengaging actions potentially saves energy which is rewarding in biological sense. \label{rev:energyPOV} This outcome is in line with the "opportunity cost model" proposed by \cite{Kurzban2013}. In this model, boredom is seen as a resource regulatory signal which drives agents to disengage the current task and stop the computational cost. In consequence, boredom encourages reallocation of computational processes to alternative higher-value activities \citep{Kurzban2013}.}
+            
+        \end{reply}
+        
+        
+        
         I skipped ahead to section 5 - as I say in Q7 I can't really evaluate the mathematics inherent to the model - my hope is that another reviewer can.
         
         First, let me say I really like the approach here and agree that boredom will drive exploration (and there is work, again not cited showing an association between boredom and sensation seeking that makes the claims here a little more problematic and nuanced - in short, the boredom prone seek novel sensations - e.g., thrills, in what is a disinhibited manner; what is in this model is novelty/sensation seeking as a mechanism of information seeking - the two are very different kinds of sensation seeking : relevant work includes but is not limited to: Zuckerman, M. (2008). Sensation seeking. The International Encyclopedia of Communication. Zuckerman, M. (1971). Dimensions of sensation seeking. Journal of consulting and clinical psychology, 36(1), 45. Dahlen, E. R., Martin, R. C., Ragan, K., \& Kuhlman, M. M. (2005). Driving anger, sensation seeking, impulsiveness, and boredom proneness in the prediction of unsafe driving. Accident Analysis \& Prevention, 37(2), 341-348. Kass, S. J., \& Vodanovich, S. J. (1990). Boredom proneness: Its relationship to Type A behavior pattern and sensation seeking. Psychology: A Journal of Human Behavior .)
         
+        % ============================================================================ %
+        We think they are the same.
+        sensation seeking vs information seeking
+        sensation seeking ~ boredom
+        
+        
+        
+        % ---------------------------------------------------------------------------- 
+        
+        \begin{reply}
+            We agree that \textit{sensation seeking} is very relevant to our work. In our framework, sensation seeking is a type of information seeking behaviors. We have added a paragraph to connect our work with sensation seeking:
+        
+        
+            \todo{I have written this paragraph, but not sure where we should insert it. Please help me with this.}
+            \textit{
+                "This notion is in line with the research on the relationship between sensation-seeking behaviors and boredom \citep{zuckerman2008sensation, zuckerman1971dimensions, dahlen2005driving, kass1990boredom}. Sensation seeking, as a personality trait, is tightly link to boredom susceptibility \citep{zuckerman1978sensation}. High sensation seekers get bored more easily suggesting that boredom susceptible individuals are prone to seek novel sensations. In our framework, receiving novel sensations is equivalent to confronting new sensory states which the agent's forward model cannot predict. This results in increasing the intrinsic reward, and therefore, encouraging the agents to perform actions similar to sensation-seeking behaviors."}
+        \end{reply}
+        
+        
+        
         I also like that a boredom agent is pitted against non-boredom, but curious agents. This is an excellent approach. And I think this is the key strength of this paper (and it is a huge strength in my view) - the results show that the boredom driven agents explores more and is less perseverative. This fits very well with notions in the boredom literature concerning the role of the STATE of boredom (Elpidorou, 2014, 2018 is most relevant here). The fact also that this aided learning (in some sense a more accurate forward model represents superior learning) is also an important finding. The only criticism/concern I have here is that this should be carefully couched in terms of the function of the state signal of boredom. When we talk about trait boredom proneness, the opposite ought to be true - those who suffer from boredom more frequently and intensely, do so because they fail to explore - something we have termed "A Failure to Launch" (Mugon et al., 2018) - that could be cast as a failure to explore. I don't think the authors need to deal extensively with the trait boredom literature but I do think it is important that they make it clear for naive readers that this model is about the function of the state boredom regulatory signal.
+        
+        \begin{reply}
+            \todo{I am not sure what we should reply here.}
+            \cite{mugon2018failure, Elpidorou.2018, Elpidorou2014}
+        \end{reply}
+        
         
         I know I have said a lot here in terms of research not covered and controversies not well addressed. I don't want this to unduly dim my enthusiasm for the approach and the outcomes of the test of their model - I see that as a really important and novel contribution. I think my concerns can be addressed through careful editing of the introduction.
         
