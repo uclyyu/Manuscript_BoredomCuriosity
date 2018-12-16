@@ -41,7 +41,7 @@
 
 % ============================================================================ %
 %                               Macros from Acer                               %
-% ============================================================================ 
+% ============================================================================ %
 % reply session
 \newenvironment{reply}  
     {\color{Blue}\noindent\newline}
@@ -64,68 +64,116 @@
 
 
 \begin{document}
+    \section*{Q2:}
+        \textit{Is the language, specifically the grammar, of sufficient quality? If no, please specify if the authors should send this manuscript to an expert in English and academic writing.} \newline
+
+    Reviewer 3:
+    No. There are many sections that I think would benefit from editing. As just one early example:
+    
+    ``This means for a given action-outcome pair the associated reinforcing signal is no longer monotonic. Instead, outcome value varies under reappraisal within according to their relevance to or attainment of goal.''
+    
+    The second sentence here has some issue: ``under reappraisal within according to'' is confusing, and ``relevance to or attainment of goal'' should be ``... of a goal''. So, minor things this kind need some improvement.
+    
+    \begin{reply}
+      % TODO
+    \end{reply}
+    
+    %--- ----- ------- ----- --- ----- ------- ----- --- ----- ------- ---
+
     \section*{Q6:}
         \textit{Please comment on the method. Key elements to consider: objective errors or fundamental flaws in the methodology; purpose of new method or technique; appropriateness of context; comprehensive description of procedures; quality of figures and tables.}\newline
         
         Reviewer 3:
-        The authors introduce early the notion that S-R is not the only way to learn - we can be goal directed and engage stimulus-ouotcome-response learning. This sounds a lot like Robert White's (1959) notion of effectance motivation - that is, we are driven to test effects of our actions on the world. In his piece he cites work from Harlow and Berlyne in animals showing they will work for rewards that satisfy curiosity. I think we don't do a good enough job incorporating some of the older work - and to my reading this work is highly relevant here. The full reference is:
+        The authors introduce early the notion that S-R is not the only way to learn - we can be goal directed and engage stimulus-outcome-response learning. This sounds a lot like Robert White's (1959) notion of effectance motivation - that is, we are driven to test effects of our actions on the world. In his piece he cites work from Harlow and Berlyne in animals showing they will work for rewards that satisfy curiosity. I think we don't do a good enough job incorporating some of the older work - and to my reading this work is highly relevant here. The full reference is:
         
         White, R. W. (1959). Motivation reconsidered: The concept of competence. Psychological review, 66(5), 297-333.
          
         The description of boredom early on is a fairly narrow one. Boredom is not necessarily tied to knowledge acquisition. I think here the authors are really tapping into the notion of monotony first and perhaps meaning/purpose second. A thing can be monotonous and yet lead to new knowledge (data input for example); similarly, a thing can seem meaningless to an individual but contain ample novel information (e.g., a lecture on string theory to an art historian). 
         
         \begin{reply}
-            Thanks for the reviewer's comment. We agree that boredom, as a state signal in biological systems, is not necessarily tied to knowledge acquisition for biological agents. We also acknowledge other psychological and physiological factors which co-determine whether biological agents choose to execute information-seeking behaviors during decision making processing. In the current study, we limited our focus on the information-seeking aspect of boredom only. This allow us to precisely define boredom in the mathematical way and evaluate the efficiency of information-seeking behaviors driven by boredom.
+            \textbf{General response:}
+            We would first like to express our genuine appreciation towards the reviewer's enthusiasm and knowledge in the field which inspired us a great deal. We have therefore become fully aware that the emergence of boredom does not necessarily induce knowledge acquisition for biological agents. There are other types (e.g., low arousal) of boredom-related behavioural patterns.
             
-            We understand that the reviewer concerns about our insufficient literature survey on this topic. We very appreciate the comments and suggestions from the reviewer. We have added more relevant and detailed introduction and discussion on this topic based on the reviewer's comments. Please see our replies as follows. 
+            In the current work, we formalised boredom from an information-theoretic standpoint---a focus, albeit limited, that ties formally one aspect of boredom to novelty-seeking and model learning in an agent. However, our work, as pointed out by the reviewer, failed to acknowledge boredom studies from the other side of the spectrum. 
+            % We also acknowledge other psychological and physiological factors which co-determine whether biological agents choose to execute information-seeking behaviours during decision making processing. 
+            
+            % In the current study, we limited our focus on the information-seeking aspect of boredom. This allows us to formalise boredom from an information-theoretical standpoint and 
+            % This allow us to precisely define boredom in the mathematical way and evaluate the efficiency of information-seeking behaviours driven by boredom.
+            
+            % giving contexts and paving ways
+            
+            % We understand that the reviewer concerns about our insufficient literature survey on this topic. We very appreciate the comments and suggestions from the reviewer. We have added more relevant and detailed introduction and discussion on this topic based on the reviewer's comments. Please see our replies as follows. 
         \end{reply}
         
         
         In addition, the authors don't do justice to the nuanced literature on boredom and arousal. They selectively cite the high arousal camp (London et al., 1972 - they fail to cite Merrifield \& Danckert, 2014) and ignore the low arousal camp (Barmack, 1939; Geiwitz, 1966; Pattyn et al., 2008; Vogel et al., 2012). The van Tilburg work they cite also consistently shows that self-reports of boredom cast it as a low arousal subjective state. A recent publication examined this debate and claimed the boredom is likely both a high AND low arousal state (subjectively if not physiologically; Danckert et al., 2018 Consc \& Cog). Given that their current model depends on one account of boredom (as high arousal prompting exploration) I think it will be important to at least acknowledge that the boredom literature is not settled on this matter.
         
         \begin{reply}
+            \textbf{Multiple, unsettled accounts of boredom:}
             We appreciate this important suggestion from the reviewer. We have added more references from other camps.
 
             \revise{\pageref{rev:arousal}}
             % org
-                {Psychophysiological studies also demonstrated that boredom plays an active role of information-seeking behaviour. Subjects showing higher levels of reported boredom are accompanied by increased autonomic arousal, such as heart rate and galvanic skin response. These findings is in line with our key notion that boredom intrinsically and actively drives agents learning behaviours \citep{london1972increase, harris2000correlates}.}
+                {
+                  Psychophysiological studies also demonstrated that boredom plays an active role of information-seeking behaviour. Subjects showing higher levels of reported boredom are accompanied by increased autonomic arousal, such as heart rate and galvanic skin response. These findings are in line with our key notion that boredom intrinsically and actively drives learning behaviours \citep{london1972increase, harris2000correlates}.
+                }
             % rev
-                {Psychophysiological studies have shown that boredom accompanies increase \citep{berlyne1960conflict, london1972increase, harris2000correlates} or decrease \citep{barmack1939definition, geiwitz1966structure, pattyn2008psychophysiological, vogel2012definition, mikulas1993essence} of physiological and psychological arousal (or both; see \cite{eastwood2012unengaged, fahlman2013development, Merrifield2014, Danckert.2018}). Even though the potential underline psychophysiological mechanisms are still under debate, the high arousal states elicited by boredom suggest that boredom may play an active role of information-seeking behaviour.}
+                {
+                  Previous studies have shown that boredom accompanies increases \citep{berlyne1960conflict, london1972increase, harris2000correlates} or decreases \citep{barmack1939definition, geiwitz1966structure, pattyn2008psychophysiological, vogel2012definition, mikulas1993essence} in arousal both in physiological and psychological terms (see \cite{eastwood2012unengaged, fahlman2013development, Merrifield2014, Danckert.2018}). Although the precise account of boredom is still largely unsettled, the high arousal standpoint suggests that boredom may play an active role in the emergence of explorative and information-seeking behaviours.
+                  % Even though the potential underline psychophysiological mechanisms are still under debate, the high arousal states elicited by boredom suggest that boredom may play an active role of information-seeking behaviour.
+                }
         \end{reply}
         
         
          
-        Next, the authors suggest that boredom is associated with creativity. Here again, the research is scant and the authors are not citing it well. Larson (1990) suggested that high ratings of boredom led to the production of lower quality essays - note, the direction here. This doesn't suggest boredom begets creativity, but that it hinders it! Gasper \& Middlewood (2014) induced boredom and suggested it was associated with creativity but their analyses lumped boredom and elation together as promotion focussed emotions - clearly not ideal. Finally, Mann \& Cadman (2014) made people bored by having them read the phone book and then completing the alternate uses task - they then preselcted from the bored group those who ALSO reported daydreaming. The day dreamers were more creative on the alternate uses task. No good control group and no capacity to determine whether daydreaming rather than boredom was the true culprit here. Clearly, the research on this is - well, crap! And the two papers cited are theory pieces that don't do justice to the state of play regarding this potential association. To my mind, boredom is highly unlikely to lead to creativity. Boredom merely signals that we are unengaged. Someone who has already cultivated creative practices may respond to that signal by engaging in a creative activity - but this a far cry from claiming that boredom begets creativity.
+        Next, the authors suggest that boredom is associated with creativity. Here again, the research is scant and the authors are not citing it well. Larson (1990) suggested that high ratings of boredom led to the production of lower quality essays - note, the direction here. This doesn't suggest boredom begets creativity, but that it hinders it! Gasper \& Middlewood (2014) induced boredom and suggested it was associated with creativity but their analyses lumped boredom and elation together as promotion focused emotions - clearly not ideal. Finally, Mann \& Cadman (2014) made people bored by having them read the phone book and then completing the alternate uses task - they then pre-selected from the bored group those who ALSO reported daydreaming. The day dreamers were more creative on the alternate uses task. No good control group and no capacity to determine whether daydreaming rather than boredom was the true culprit here. Clearly, the research on this is - well, crap! And the two papers cited are theory pieces that don't do justice to the state of play regarding this potential association. To my mind, boredom is highly unlikely to lead to creativity. Boredom merely signals that we are unengaged. Someone who has already cultivated creative practices may respond to that signal by engaging in a creative activity - but this a far cry from claiming that boredom begets creativity.
         
         
          
         \begin{reply}
+            \textbf{Boredom and creativity:}
+            Larson's participants lacked the degree of freedom to disengage from the essay-writing, whilst the assessment on one's creativity was based on the quality of essays.
+            Creativity in Larson's (1990) terms is largely studies in a narrower domain, namely, essay-writing. It only hinders creativity if the bored individual is instructed not to disengage from the boredom-inducing task.
+            Boredom: diversify the outcomes one's actions may bring about. These outcomes are quite often those un-encountered before; therefore, they bears novelty and information to an agent. 
+            Stop writing an essay; instead, look at what others are writing
+            ``inspiring a search for change and variety'' (Vodanovich & Kass, 1990)
+            
+            
             We thank for the reviewer's suggestion. We agree that, instead of a direct causal relation between boredom and creativity, boredom indirectly increases the probability for an agent to engage in creative activities. We changed our expression of this section and also added the counter-example \citep{larson1990emotions} mentioned by the reviewers in to this section.
             
             \revise{\pageref{rev:creativity}}
             % org
-                {Consistent with our argument, evidence also showed that boredom is associated with increase in creativity \citep{harris2000correlates, schubert1977boredom, schubert1978creativity}. This suggests that the presence of boredom serves to reconfigure agent's instrumental device in order to escape devalued states.}
+                {
+                  Consistent with our argument, evidence also showed that boredom is associated with increase in creativity \citep{harris2000correlates, schubert1977boredom, schubert1978creativity}. This suggests that the presence of boredom serves to reconfigure agent's instrumental device in order to escape devalued states.
+                }
             % rev
-                {Based on our notion, we also postulate that boredom may promote agents to perform creative behaviors via disengaging from low information gain environments and re-engaging in creative activities \citep{harris2000correlates, schubert1977boredom, schubert1978creativity}. This suggests that the presence of boredom serves to reconfigure agent's instrumental device in order to escape devalued states (but not in all conditions, see \cite{larson1990emotions}).}
+                {
+                  Based on our notion, we also postulate that boredom may promote agents to perform creative behaviors via disengaging from low information gain environments and re-engaging in creative activities \citep{harris2000correlates, schubert1977boredom, schubert1978creativity}. This suggests that the presence of boredom serves to reconfigure agent's instrumental device in order to escape devalued states (but not in all conditions, see \cite{larson1990emotions}).
+                }
         
 
         \end{reply}
         
         
         
-        Which brings me to another missing piece here: Gomez-Ramirez \& Costa  (2017) (not cited in this paper) published a computational model of boredom and its relation to exploration, with a particular focus on solving the dark room problem. They titled it "Boredom begets creativity" (followed by some subtitle). I like this paper a lot but the title is misleading. Boredom begets the drive for exploration is more appropriate in my view and I think that is what is being proposed here too. But at the very least the authors would need to cite this model and differentiate themselves from it . I think they can do that (the mere notion that their model outdoes other curiosity based agents is enough for me to say this is worth publishing) - but it does need to be done. Otherwise, we're just engaging parallel lines of thinking/research and failing to talk to one another. 
+        Which brings me to another missing piece here: Gomez-Ramirez \& Costa  (2017) (not cited in this paper) published a computational model of boredom and its relation to exploration, with a particular focus on solving the dark room problem. They titled it "Boredom begets creativity" (followed by some subtitle). I like this paper a lot but the title is misleading. Boredom begets the drive for exploration is more appropriate in my view and I think that is what is being proposed here too. But at the very least the authors would need to cite this model and differentiate themselves from it. I think they can do that (the mere notion that their model outdoes other curiosity based agents is enough for me to say this is worth publishing) - but it does need to be done. Otherwise, we're just engaging parallel lines of thinking/research and failing to talk to one another. 
         
         \begin{reply}
             Thank the reviewer for providing this work closely related to our study.
+            Ours is about learning to generate behaviours (from an action policy) that can be interpreted as curiosity (here, obtaining a better predictive model of the environment faster).
+            Theirs: a very strong prior on how boredom should vary (via the discount factor) over time. An idealised depiction of the interplay between boredom and predictive tendency. Did not address a learning problem. Interesting to frame the problem under the context of financial modelling. Boredom itself does not fit into the picture of predictive coding (would be nice if boredom is also part of the stochastic differential equation).
+            Where should I put the text for comparison?
+            
+            Computational accounts on boredom are scarce.
             \newline
             \todo{Waiting for Yen}
         \end{reply}
         
-        Just prior to the discussion of Markov Decision processes the authors introduce their notion that boredom is associated with homeostasis and curiosity with heterostasis. I need this to be unpacked more clearly . In my view of boredom it is a drive state arising from a feeling that one's cognitive resources are being underutilised (so the agent is understimulated and needs to do something to raise that). Think of a sustained attention task - these are inherently boring, low rate, low information tasks. As you continue doing it your arousal levels dip perhaps signalling disengagement from the task. You then have two options: do something else or try to raise arousal levels to the necessary point to successfully continue with the task. This sounds like a homeostatic motivation - but is this how the authors are considering things? It wasn't clear. And the flipside was even more opaque. 
+        Just prior to the discussion of Markov Decision processes the authors introduce their notion that boredom is associated with homeostasis and curiosity with heterostasis. I need this to be unpacked more clearly. In my view of boredom it is a drive state arising from a feeling that one's cognitive resources are being underutilised (so the agent is understimulated and needs to do something to raise that). Think of a sustained attention task - these are inherently boring, low rate, low information tasks. As you continue doing it your arousal levels dip perhaps signalling disengagement from the task. You then have two options: do something else or try to raise arousal levels to the necessary point to successfully continue with the task. This sounds like a homeostatic motivation - but is this how the authors are considering things? It wasn't clear. And the flipside was even more opaque. 
         
         
         \begin{reply}
-            We moved more detailed description from session "OMEO-HETEROSTATIC VALUE GRADIENTS" to this paragraph. We hope that this amendment makes our notion more clear now.
+            We moved more detailed description from session "HOMEO-HETEROSTATIC VALUE GRADIENTS" to this paragraph. We hope that this amendment makes our notion more clear now.
         
             \revise{\pageref{rev:HomoVsHetero}}
             % org
@@ -192,10 +240,6 @@
         
         
         I know I have said a lot here in terms of research not covered and controversies not well addressed. I don't want this to unduly dim my enthusiasm for the approach and the outcomes of the test of their model - I see that as a really important and novel contribution. I think my concerns can be addressed through careful editing of the introduction.
-        
-        
-        Our response:
-        Pending
 
 
     \bibliographystyle{frontiersinSCNS_ENG_HUMS}
